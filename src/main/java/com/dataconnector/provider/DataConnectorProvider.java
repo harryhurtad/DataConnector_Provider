@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.prueba.dataconnector.provider;
+package com.dataconnector.provider;
 
 import com.dataconnector.annotation.DataConnectorPOJO;
 import com.dataconnector.sql.ProviderDataConnector;

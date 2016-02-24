@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.prueba.dataconnector.operations;
+package com.dataconnector.interfaces;
+
+import com.dataconnector.manager.DataConnectorFactory;
 
 /**
  *
  * @author proveedor_hhurtado
  */
-public class OrOperation {
+public abstract class AbstractFactoryDataConnector implements DataConnectorFactory{
     
 }

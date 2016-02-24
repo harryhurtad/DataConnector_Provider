@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.prueba.dataconnector.interfaces;
+package com.dataconnector.sql;
 
-import com.dataconnector.sql.FactoryDataConnectorManager;
+import com.dataconnector.sql.Selection;
 
 /**
  *
  * @author proveedor_hhurtado
  */
-public abstract class AbstractFactoryDataConnector implements FactoryDataConnectorManager{
+public class SelectionImpl implements Selection{
     
 }

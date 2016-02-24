@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.prueba.dataconnector.operations;
+package com.dataconnector.operations;
 
-import com.prueba.dataconnector.utils.Constantes;
+import com.dataconnector.utils.Constantes;
 import com.dataconnector.sql.OperationEnum;
 import com.dataconnector.sql.Expression;
 import com.dataconnector.sql.Parameter;

@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.prueba.dataconnector.builder;
+package com.dataconnector.builder;
 
-import com.dataconnector.sql.CriterialBuilder;
-import com.dataconnector.sql.CriterialQuery;
+import com.dataconnector.sql.CriteriaBuilder;
+import com.dataconnector.criteria.CriteriaQuery;
 import com.dataconnector.sql.Expression;
 import com.dataconnector.sql.Predicate;
-import com.prueba.dataconnector.operations.AndOperation;
+import com.dataconnector.operations.AndOperation;
 
 /**
  *
  * @author proveedor_hhurtado
  */
-public class CriterialBuilderImpl implements CriterialBuilder{
+public class CriterialBuilderImpl implements CriteriaBuilder{
 
   
 
@@ -29,55 +29,7 @@ public class CriterialBuilderImpl implements CriterialBuilder{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Expression equal(Expression param1, Expression param2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Expression notEqual(Expression param1, Expression param2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Expression mayorQue(Expression param1, Expression param2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Expression mayorIgualQue(Expression param1, Expression param2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Expression menorQue(Expression param1, Expression param2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Expression menorIgualQue(Expression param1, Expression param2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Expression between(Expression param1, Expression param2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Expression isNull(Expression param1, Expression param2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Expression isNotNull(Expression param1, Expression param2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Expression IN(String[] value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  
 
     @Override
     public Predicate and(Expression param1, Expression param2) {
@@ -103,7 +55,57 @@ public class CriterialBuilderImpl implements CriterialBuilder{
     }
 
     @Override
-    public CriterialQuery createQuery() {
+    public CriteriaQuery createQuery() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Predicate equal(Expression param1, Expression param2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Predicate notEqual(Expression param1, Expression param2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Predicate mayorQue(Expression param1, Expression param2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Predicate mayorIgualQue(Expression param1, Expression param2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Predicate menorQue(Expression param1, Expression param2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Predicate menorIgualQue(Expression param1, Expression param2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Predicate between(Expression param1, Expression param2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Predicate isNull(Expression param1, Expression param2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Predicate isNotNull(Expression param1, Expression param2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Predicate IN(String[] value) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

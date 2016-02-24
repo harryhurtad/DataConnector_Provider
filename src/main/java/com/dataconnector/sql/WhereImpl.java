@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.prueba.dataconnector.sql;
+package com.dataconnector.sql;
 
 /**
  *
  * @author proveedor_hhurtado
  */
-public class FromImpl {
+public class WhereImpl {
     
 }

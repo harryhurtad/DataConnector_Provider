@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.prueba.dataconnector.sql;
-
-import com.dataconnector.sql.Selection;
+package com.dataconnector.sql;
 
 /**
  *
  * @author proveedor_hhurtado
  */
-public class SelectionImpl implements Selection{
+public class FromImpl {
     
 }

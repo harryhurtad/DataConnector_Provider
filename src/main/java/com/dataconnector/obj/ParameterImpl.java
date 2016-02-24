@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.prueba.dataconnector.obj;
+package com.dataconnector.obj;
 
 import com.dataconnector.sql.Expression;
 import com.dataconnector.sql.OperationEnum;

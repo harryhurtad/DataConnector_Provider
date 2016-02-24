@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.prueba.dataconnector.builder;
+package com.dataconnector.builder;
 
-import com.dataconnector.sql.CriterialQuery;
+import com.dataconnector.criteria.CriteriaQuery;
 import com.dataconnector.sql.Predicate;
 import com.dataconnector.sql.Root;
 import com.dataconnector.sql.Selection;
@@ -15,23 +15,23 @@ import java.util.List;
  *
  * @author proveedor_hhurtado
  */
-public class CriterialQueryImpl implements CriterialQuery{
+public class CriterialQueryImpl implements CriteriaQuery{
 
     
     
     
     @Override
-    public CriterialQuery select(Selection[] params) {
+    public CriteriaQuery select(Selection[] params) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public CriterialQuery where(Predicate[] params) {
+    public CriteriaQuery where(Predicate[] params) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public CriterialQuery from(List<Root> entities) {
+    public CriteriaQuery from(List<Root> entities) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
