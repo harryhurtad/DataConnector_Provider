@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.dataconnector.manager;
 
+import com.dataconnector.builder.CriteriaBuilderImpl;
 import com.dataconnector.criteria.AbstractQuery;
 import com.dataconnector.criteria.CriteriaQuery;
 import com.dataconnector.criteria.delete.CommonAbstractDelete;
@@ -13,19 +13,37 @@ import com.dataconnector.criteria.delete.CriteriaDelete;
 import com.dataconnector.criteria.insert.CriteriaInsert;
 import com.dataconnector.criteria.update.CommonAbstractUpdate;
 import com.dataconnector.criteria.update.CriteriaUpdate;
+import com.dataconnector.criterial.generic.CriteriaQueryImpl;
+import com.dataconnector.excecution.SelectQueryImpl;
+import com.dataconnector.object.ProvidersSupportEnum;
 import com.dataconnector.sql.CriteriaBuilder;
+import com.dataconnector.sql.FromImpl;
 
 /**
- *{Insert class description here}
- * @version $Revision: 1.1.1  (UTF-8)
- * @since build 23/02/2016  
- * @author proveedor_hhurtado  email: proveedor_hhurtad@ath.com.co
+ * Clase que gestiona la creación de los elementos SELECT,INSERT,UPDATE,DELETE de x BD
+ *
+ * @version $Revision: 1.1.1 (UTF-8)
+ * @since build 23/02/2016
+ * @author proveedor_hhurtado email: proveedor_hhurtad@ath.com.co
  */
-public class DataConnectorManagerImpl implements DataConnectorManager{
+public class DataConnectorManagerImpl implements DataConnectorManager {
+
+    private final CriteriaBuilderImpl builder;
+
+    public DataConnectorManagerImpl(CriteriaBuilder builder) {
+        this.builder = (CriteriaBuilderImpl) builder;
+        this.builder.setDriver(ProvidersSupportEnum.GENERIC);
+    }
 
     @Override
     public Query createQuery(CriteriaQuery q) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //
+        System.out.println("Imprimir construcción del query.....");
+        CriteriaQueryImpl implQ = (CriteriaQueryImpl) q;
+        FromImpl from=implQ.getFromImpl();
+        from.proccessJoins();
+        System.out.println(implQ.getSelectImpl().getTranslation() + " " + from.getTranslation() + " " + implQ.getWhereImpl().getTranslation());
+        return new SelectQueryImpl();
     }
 
     @Override
@@ -45,12 +63,12 @@ public class DataConnectorManagerImpl implements DataConnectorManager{
 
     @Override
     public CriteriaBuilder getCriterialBuilder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return builder;
     }
-  
+
     @Override
     public String QuiEst() {
-    
+
         return "DataConnectorGenerico";
     }
 

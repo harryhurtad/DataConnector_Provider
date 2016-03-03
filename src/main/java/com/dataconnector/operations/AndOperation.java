@@ -5,80 +5,42 @@
  */
 package com.dataconnector.operations;
 
-import com.dataconnector.utils.Constantes;
 import com.dataconnector.sql.OperationEnum;
 import com.dataconnector.sql.Expression;
-import com.dataconnector.sql.Parameter;
-import com.dataconnector.sql.ParameterExpression;
+import com.dataconnector.sql.JoinPredicate;
 import com.dataconnector.sql.Predicate;
-import java.util.List;
 
 /**
+ * Implementacion que representa la conjuncion AND del lenguaje SQL
  *
- * @author proveedor_hhurtado
+ * @version $Revision: 1.1.1 (UTF-8)
+ * @since build 26/02/2016
+ * @author proveedor_hhurtado email: proveedor_hhurtad@ath.com.co
  */
-public final class AndOperation implements Predicate {
-
-    private Parameter parametro1;
-    private Parameter parametro2;
-    private StringBuilder sqlResultBuilder;
+public final class AndOperation extends AbstractOperPredicate implements JoinPredicate {
 
     public AndOperation() {
-        setOperation(OperationEnum.AND);
+        super(OperationEnum.AND);
     }
 
-    public void translatePredicate(Expression exp1, Expression exp2) {
-        ParameterExpression param1 = (ParameterExpression) exp1;
-        ParameterExpression param2 = (ParameterExpression) exp2;
-        this.parametro1 = param1;
-        this.parametro2 = param2;
-        sqlResultBuilder = new StringBuilder();
-        //transformacion a sql
-        sqlResultBuilder.append(Constantes.PARENTECIS_DERECHO);
-        sqlResultBuilder.append(Constantes.ESPACIO);
-        sqlResultBuilder.append(((Parameter) param1).getNombreParametro());
-        sqlResultBuilder.append(Constantes.ESPACIO);
-        sqlResultBuilder.append(OperationEnum.getSimboloOper(OperationEnum.AND));  
-        sqlResultBuilder.append(Constantes.ESPACIO);
-        sqlResultBuilder.append(((Parameter) param2).getNombreParametro());
-        sqlResultBuilder.append(Constantes.ESPACIO);
-        sqlResultBuilder.append(Constantes.PARENTECIS_IZQUIERDO);
+    public Predicate translateExpression(Predicate[] parameters) {
+        super.proccessTranslate(parameters);
+        return this;
     }
 
-    public void translateExpression(Predicate[] params) {
-
-    }
-
-    public void translateExpression() {
-
-    }
-
-    public Parameter getParametro1() {
-        return parametro1;
-    }
-
-    public Parameter getParametro2() {
-        return parametro2;
+    public JoinPredicate translateExpression(JoinPredicate[] parameters) {
+        super.proccessTranslate(parameters);
+        return this;
     }
 
     @Override
-    public StringBuilder getSql() {
-        return sqlResultBuilder;
+    public Predicate translateOperation(Expression param1, Expression param2) {
+        proccessTranslate(param1, param2);
+        return this;
     }
 
-    @Override
-    public void setOperation(OperationEnum operation) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public JoinPredicate translateOperation(JoinPredicate param1, JoinPredicate param2) {
+        proccessTranslate(param1, param2);
+        return this;
     }
-
-    @Override
-    public OperationEnum getOperation() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setListExpression(List<Expression> listExp) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

@@ -5,28 +5,50 @@
  */
 package com.dataconnector.obj;
 
-import com.dataconnector.sql.Expression;
-import com.dataconnector.sql.OperationEnum;
-import com.dataconnector.sql.Parameter;
-import java.util.List;
+import com.dataconnector.sql.ParameterExpression;
 
 /**
+ * Clase que representa los parametros pasados por SQL
  *
- * @author proveedor_hhurtado
+ * @version $Revision: 1.1.1 (UTF-8)
+ * @param <X>
+ * @since build 23/02/2016
+ * @author proveedor_hhurtado email: proveedor_hhurtad@ath.com.co
  */
-public class ParameterImpl implements Parameter {
+public class ParameterImpl<X extends Object> implements ParameterExpression {
 
-    private String nombreParametro;
-    
-    @Override
-    public void atributo(String nombreAtributo) {
-        this.nombreParametro=nombreAtributo;
+    private final String nombreParametro;
+    private StringBuilder sql;
+    private final Class type;
+
+    public ParameterImpl(Class type, String nameParam) {
+        sql = new StringBuilder();
+        this.type = type;
+        this.nombreParametro = nameParam;
     }
 
+    @Override
     public String getNombreParametro() {
         return nombreParametro;
     }
 
+    @Override
+    public String getAlias() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public StringBuilder getSQLTransalte() {
+        sql.append(":");
+        sql.append(nombreParametro);
+        return sql;
+    }
+
+    @Override
+    public Class<X> getParameterType() {
+        return type;
+    }
+
    
-    
+
 }

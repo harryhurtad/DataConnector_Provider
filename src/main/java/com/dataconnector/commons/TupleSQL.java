@@ -4,14 +4,17 @@
  * and open the template in the editor.
  */
 
-package com.dataconnector.obj;
+package com.dataconnector.commons;
 
 /**
- *{Insert class description here}
+ * Interfaz que repesenta los elementos importantes en la creacioon de una sentencia sql
  * @version $Revision: 1.1.1  (UTF-8)
- * @since build 23/02/2016  
+ * @since build 25/02/2016  
  * @author proveedor_hhurtado  email: proveedor_hhurtad@ath.com.co
  */
-public class Constantes {
+public interface TupleSQL {
 
+    ElementSQLEnum getTypeElementSQL();
+    String getTranslation();
+    
 }

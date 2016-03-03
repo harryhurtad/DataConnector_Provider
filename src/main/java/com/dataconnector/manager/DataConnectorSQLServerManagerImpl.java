@@ -6,10 +6,12 @@
 
 package com.dataconnector.manager;
 
+import com.dataconnector.builder.CriteriaBuilderImpl;
 import com.dataconnector.criteria.CriteriaQuerySQLServer;
 import com.dataconnector.criteria.delete.CriteriaDeleteSQLServer;
 import com.dataconnector.criteria.insert.CriteriaInsertSQLServer;
 import com.dataconnector.criteria.update.CriteriaUpdateSQLServer;
+import com.dataconnector.object.ProvidersSupportEnum;
 import com.dataconnector.sql.CriteriaBuilder;
 
 /**
@@ -20,9 +22,18 @@ import com.dataconnector.sql.CriteriaBuilder;
  */
 public class DataConnectorSQLServerManagerImpl implements DataConnectorSQLServerManager {
 
+    private CriteriaBuilderImpl builder;
+
+    public DataConnectorSQLServerManagerImpl(CriteriaBuilder builder) {
+         this.builder = (CriteriaBuilderImpl)builder;
+        this.builder.setDriver(ProvidersSupportEnum.SQLSERVER);
+    }
+    
+    
+    
     @Override
     public CriteriaBuilder getCriterialBuilder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     return builder;   
     }
 
     @Override
