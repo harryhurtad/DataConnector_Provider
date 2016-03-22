@@ -65,7 +65,7 @@ public abstract class AbstractOperPredicate implements Predicate {
      * @param parameters 
      */
     public void proccessTranslate(Predicate[] parameters) {
-        sql.append(Constantes.PARENTECIS_DERECHO);
+        sql.append(Constantes.PARENTECIS_IZQUIERDO);
         sql.append(Constantes.ESPACIO);
         int cantidadElemProces = parameters.length;
         int contador = 0;
@@ -77,14 +77,14 @@ public abstract class AbstractOperPredicate implements Predicate {
             sql.append(proccesElement(p1));
             sql.append(Constantes.ESPACIO);
             sql.append(operacion.getSimboloOper());
-            sql.append(proccesElement(p1));
+            sql.append(proccesElement(p2));
             sql.append(Constantes.ESPACIO);
             listParameters.add(p1);
             listParameters.add(p2);
             cantidadElemProces -= 2;
         }
         sql.append(Constantes.ESPACIO);
-        sql.append(Constantes.PARENTECIS_IZQUIERDO);
+        sql.append(Constantes.PARENTECIS_DERECHO);
 
     }
 
