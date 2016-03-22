@@ -14,7 +14,8 @@ package com.dataconnector.commons;
  */
 public enum ElementSQLEnum {
 
-   SELECT("SELECT"),WHERE("WHERE"),FROM("FROM"),ORDER_BY("orderby"),GROUP_BY("groupby"),ON("ON"),JOIN("JOIN");
+   SELECT("SELECT"),WHERE("WHERE"),FROM("FROM"),ORDER_BY("orderby"),
+   GROUP_BY("groupby"),ON("ON"),JOIN("JOIN"),COUNT("COUNT"),ASTERISCO("*");
    private String nameElement;
 
     private ElementSQLEnum(String nameElement) {

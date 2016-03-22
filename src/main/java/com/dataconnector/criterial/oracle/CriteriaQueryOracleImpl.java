@@ -38,4 +38,9 @@ public class CriteriaQueryOracleImpl implements CriteriaQueryOracle {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public Class getClassToCreate() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

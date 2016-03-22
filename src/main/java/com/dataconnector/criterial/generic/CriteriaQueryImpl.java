@@ -28,11 +28,15 @@ public class CriteriaQueryImpl implements CriteriaQuery {
     private final FromImpl fromImpl;
     private WhereImpl whereImpl;
     private int countAliasTable = 0;
+    private final Class classToCreate;
+   // private Object param;
 
-    public CriteriaQueryImpl() {
+    public CriteriaQueryImpl(Class param) {
 
         fromImpl = new FromImpl();
-        selectImpl = new SelectImpl();
+        selectImpl = new SelectImpl(param);
+        this.classToCreate=param;
+      
     }
 
     @Override
@@ -77,4 +81,11 @@ public class CriteriaQueryImpl implements CriteriaQuery {
         return whereImpl;
     }
 
+    @Override
+    public Class getClassToCreate() {
+        return classToCreate;
+    }
+
+    
+    
 }

@@ -149,10 +149,11 @@ public class CriteriaBuilderImpl implements CriteriaBuilder {
      * @return losd hijos de AbstractQuery de acuerdo al driver seleccionado
      */
     @Override
-    public AbstractQuery createQuery(Object param) {
+    public AbstractQuery createQuery(Class param) {
         AbstractQuery query;
+    
         switch (getDriver()) {
-
+               
             case ORACLE:
                 query = new CriteriaQueryOracleImpl();
                 break;
@@ -160,7 +161,7 @@ public class CriteriaBuilderImpl implements CriteriaBuilder {
                 query = new CriteriaQuerySQLServerImpl();
                 break;
             default:
-                query = new CriteriaQueryImpl();
+                query = new CriteriaQueryImpl(param);
                 break;
         }
 

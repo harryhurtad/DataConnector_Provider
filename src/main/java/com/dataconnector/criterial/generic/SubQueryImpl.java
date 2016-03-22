@@ -32,13 +32,13 @@ public class SubQueryImpl implements SubQuery {
     private int countAliasTable = 0;
     private Class typeReturn;
     private StringBuilder sql;
+    private String alias = "";
 
     public SubQueryImpl(Class typeReturn) {
-        this.typeReturn=typeReturn;
-        selectImpl = new SelectImpl();
+        this.typeReturn = typeReturn;
+        selectImpl = new SelectImpl(typeReturn);
         fromImpl = new FromImpl();
-        sql=new StringBuilder();
-        
+        sql = new StringBuilder();
 
     }
 
@@ -56,7 +56,7 @@ public class SubQueryImpl implements SubQuery {
         //  for (Predicate elemento : params) {
         whereImpl = new WhereImpl();
         whereImpl.proccess(params);
-       // }
+        // }
         return this;
     }
 
@@ -76,28 +76,35 @@ public class SubQueryImpl implements SubQuery {
         this.typeReturn = typeReturn;
     }
 
-    public void proccess(){
-    
+    public void proccess() {
+
         sql.append(Constantes.PARENTECIS_IZQUIERDO);
         sql.append(Constantes.ESPACIO);
         //Select
-        if(selectImpl!=null){
+        if (selectImpl != null) {
             sql.append(selectImpl.getTranslation());
         }
         //From        
-        if(fromImpl!=null){
+        if (fromImpl != null) {
             sql.append(Constantes.ESPACIO);
             sql.append(fromImpl.getTranslation());
             sql.append(Constantes.ESPACIO);
         }
         //where
-        if(whereImpl!=null){            
+        if (whereImpl != null) {
             sql.append(whereImpl.getTranslation());
         }
         sql.append(Constantes.ESPACIO);
+        if (!this.alias.equals("")) {
+            sql.append(Constantes.ALIAS);
+            sql.append(Constantes.ESPACIO);
+            sql.append(this.alias);
+            sql.append(Constantes.ESPACIO);
+        }
+
         sql.append(Constantes.PARENTECIS_DERECHO);
     }
-    
+
     @Override
     public SubQuery orderBy(Order... ord) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -105,14 +112,25 @@ public class SubQueryImpl implements SubQuery {
 
     @Override
     public String getAlias() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.alias;
     }
 
     @Override
-    public StringBuilder getSQLTransalte() {  
+    public StringBuilder getSQLTransalte() {
         return sql;
     }
 
    
+    @Override
+    public Selection alias(String value) {
+
+        this.alias = value;
+        return this;
+    }
+
+    @Override
+    public Class getClassToCreate() {
+        return typeReturn;
+    }
 
 }

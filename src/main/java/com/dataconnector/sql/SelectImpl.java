@@ -9,12 +9,13 @@ import com.dataconnector.commons.ElementSQLEnum;
 import com.dataconnector.commons.TupleSQL;
 import com.dataconnector.criteria.SubQuery;
 import com.dataconnector.criterial.generic.SubQueryImpl;
+import com.dataconnector.object.ValueRoot;
 import com.dataconnector.utils.Constantes;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementacion que representa  Select del lenguaje SQL
+ * Implementacion que representa Select del lenguaje SQL
  *
  * @version $Revision: 1.1.1 (UTF-8)
  * @since build 26/02/2016
@@ -24,10 +25,13 @@ public class SelectImpl implements TupleSQL {
 
     private final StringBuilder sql;
     private final List<Selection> listParametros;
+    private int contadorAlias = 0;
+    private final Class classToCreate;
 
-    public SelectImpl() {
+    public SelectImpl(Class param) {
         sql = new StringBuilder();
         this.listParametros = new ArrayList();
+        this.classToCreate=param;
         //proccess(listParametros);
     }
 
@@ -36,24 +40,48 @@ public class SelectImpl implements TupleSQL {
         sql.append(Constantes.ESPACIO);
         //adiciona los campos al select
         for (int contador = 0; contador < params.length; contador++) {
-            if(params[contador] instanceof SubQuery){
-                ((SubQueryImpl)(params[contador])).proccess();
+            //Evalua para el subquery
+            if (params[contador] instanceof SubQuery) {
+                SubQueryImpl subq = (SubQueryImpl) (params[contador]);
+                //Evalua si tiene un alias
+                if (subq.getAlias().equals("")) {
+                    subq.alias(Constantes.NOMBRE_ALIAS_CAMPO + contadorAlias);
+                    contadorAlias++;
+                }
+                subq.proccess();
             }
+            
+            if (params[contador] instanceof ValueRoot) {
+                ValueRoot valueRoot=(ValueRoot) (params[contador]);
+                 if (valueRoot.getAlias().equals("")) {
+                    valueRoot.alias(Constantes.NOMBRE_ALIAS_CAMPO + contadorAlias);                   
+                    contadorAlias++;
+                }
+                  valueRoot.proccessAlias();
+            }
+
             sql.append(params[contador].getSQLTransalte());
             if (((contador + 1) < params.length) && (params.length > 1)) {
                 sql.append(Constantes.COMA);
             }
             listParametros.add(params[contador]);
         }
-        
+
     }
 
+    public Class getClassToCreate() {
+        return classToCreate;
+    }
+
+   
+    
+
+    
+    
     public List<Selection> getListParametros() {
         return listParametros;
     }
 
-    
-    
     @Override
     public ElementSQLEnum getTypeElementSQL() {
         return ElementSQLEnum.SELECT;

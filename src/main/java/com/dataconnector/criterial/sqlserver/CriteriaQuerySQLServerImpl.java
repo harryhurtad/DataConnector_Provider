@@ -31,13 +31,25 @@ public class CriteriaQuerySQLServerImpl implements CriteriaQuerySQLServer{
     }
 
     @Override
-    public AbstractQuery orderBy(Order... ord) {
+    public CriteriaQuerySQLServer select(Selection... params) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public AbstractQuery where(Predicate params) {
+    public CriteriaQuerySQLServer where(Predicate params) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public CriteriaQuerySQLServer orderBy(Order... ord) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Class getClassToCreate() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
 
 }

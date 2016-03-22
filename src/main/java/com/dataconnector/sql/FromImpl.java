@@ -62,6 +62,12 @@ public class FromImpl implements TupleSQL {
         }
     }
 
+    public List<Root> getListParametros() {
+        return listParametros;
+    }
+    
+    
+
     @Override
     public ElementSQLEnum getTypeElementSQL() {
         return ElementSQLEnum.FROM;

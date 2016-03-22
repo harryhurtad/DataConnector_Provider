@@ -96,4 +96,13 @@ public class JoinsImpl implements Join {
         return vr;
     }
 
+    public OnImpl getOnImpl() {
+        return onImpl;
+    }
+
+    public WhereImpl getWhereImpl() {
+        return whereImpl;
+    }
+
+    
 }

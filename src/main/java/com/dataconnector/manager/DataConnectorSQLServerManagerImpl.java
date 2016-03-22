@@ -13,6 +13,7 @@ import com.dataconnector.criteria.insert.CriteriaInsertSQLServer;
 import com.dataconnector.criteria.update.CriteriaUpdateSQLServer;
 import com.dataconnector.object.ProvidersSupportEnum;
 import com.dataconnector.sql.CriteriaBuilder;
+import java.sql.Connection;
 
 /**
  *{Insert class description here}
@@ -58,6 +59,11 @@ public class DataConnectorSQLServerManagerImpl implements DataConnectorSQLServer
 
     @Override
     public Query createQuery(CriteriaUpdateSQLServer q) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Connection getConnection() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

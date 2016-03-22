@@ -18,8 +18,9 @@ import com.dataconnector.sql.ParameterExpression;
 public class ParameterImpl<X extends Object> implements ParameterExpression {
 
     private final String nombreParametro;
-    private StringBuilder sql;
+    private final StringBuilder sql;
     private final Class type;
+    private Object value;
 
     public ParameterImpl(Class type, String nameParam) {
         sql = new StringBuilder();

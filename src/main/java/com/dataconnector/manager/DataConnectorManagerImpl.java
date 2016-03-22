@@ -6,18 +6,17 @@
 package com.dataconnector.manager;
 
 import com.dataconnector.builder.CriteriaBuilderImpl;
-import com.dataconnector.criteria.AbstractQuery;
+import com.dataconnector.common.ConnectionHelper;
 import com.dataconnector.criteria.CriteriaQuery;
-import com.dataconnector.criteria.delete.CommonAbstractDelete;
 import com.dataconnector.criteria.delete.CriteriaDelete;
 import com.dataconnector.criteria.insert.CriteriaInsert;
-import com.dataconnector.criteria.update.CommonAbstractUpdate;
 import com.dataconnector.criteria.update.CriteriaUpdate;
 import com.dataconnector.criterial.generic.CriteriaQueryImpl;
 import com.dataconnector.excecution.SelectQueryImpl;
+import com.dataconnector.helper.ValidateSelectQuery;
 import com.dataconnector.object.ProvidersSupportEnum;
 import com.dataconnector.sql.CriteriaBuilder;
-import com.dataconnector.sql.FromImpl;
+import java.sql.Connection;
 
 /**
  * Clase que gestiona la creación de los elementos SELECT,INSERT,UPDATE,DELETE de x BD
@@ -28,7 +27,7 @@ import com.dataconnector.sql.FromImpl;
  */
 public class DataConnectorManagerImpl implements DataConnectorManager {
 
-    private final CriteriaBuilderImpl builder;
+    private final CriteriaBuilderImpl builder;  
 
     public DataConnectorManagerImpl(CriteriaBuilder builder) {
         this.builder = (CriteriaBuilderImpl) builder;
@@ -40,10 +39,16 @@ public class DataConnectorManagerImpl implements DataConnectorManager {
         //
         System.out.println("Imprimir construcción del query.....");
         CriteriaQueryImpl implQ = (CriteriaQueryImpl) q;
-        FromImpl from=implQ.getFromImpl();
-        from.proccessJoins();
+        SelectQueryImpl impl= new SelectQueryImpl(q,this);
+     //  FromImpl from=implQ.getFromImpl();
+      /*  from.proccessJoins();
         System.out.println(implQ.getSelectImpl().getTranslation() + " " + from.getTranslation() + " " + implQ.getWhereImpl().getTranslation());
-        return new SelectQueryImpl();
+        SelectQueryImpl impl= new SelectQueryImpl(q);*/
+        impl.extractParameters();
+        //Valida la sintaxis de la sentencia sql
+        ValidateSelectQuery validate=ValidateSelectQuery.getInstance();
+        validate.validateQuerySelect(implQ.getSelectImpl());
+        return impl;
     }
 
     @Override
@@ -70,6 +75,11 @@ public class DataConnectorManagerImpl implements DataConnectorManager {
     public String QuiEst() {
 
         return "DataConnectorGenerico";
+    }
+
+    @Override
+    public Connection getConnection() {
+       return ConnectionHelper.getConnection();
     }
 
 }
