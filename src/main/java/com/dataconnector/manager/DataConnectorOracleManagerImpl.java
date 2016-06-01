@@ -3,49 +3,46 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.dataconnector.manager;
 
-import com.dataconnector.builder.CriteriaBuilderImpl;
-import com.dataconnector.criteria.CriteriaQueryOracle;
+import com.dataconnector.query.Query;
+import com.dataconnector.builder.AbstractCriteriaBuilderImpl;
+import com.dataconnector.criteria.CriteriaQuery;
+
 import com.dataconnector.criteria.delete.CriteriaDeleteOracle;
 import com.dataconnector.criteria.insert.CriteriaInsertOracle;
 import com.dataconnector.criteria.update.CriteriaUpdateOracle;
-import com.dataconnector.object.ProvidersSupportEnum;
+import com.dataconnector.helper.DataConnectorConWrap;
+import com.dataconnector.constans.ProvidersSupportEnum;
 import com.dataconnector.sql.CriteriaBuilder;
 import java.sql.Connection;
 
 /**
- *{Insert class description here}
- * @version $Revision: 1.1.1  (UTF-8)
- * @since build 23/02/2016  
- * @author proveedor_hhurtado  email: proveedor_hhurtad@ath.com.co
+ * {Insert class description here}
+ *
+ * @version $Revision: 1.1.1 (UTF-8)
+ * @since build 23/02/2016
+ * @author proveedor_hhurtado email: proveedor_hhurtad@ath.com.co
  */
-public class DataConnectorOracleManagerImpl implements DataConnectorOracleManager{
+public class DataConnectorOracleManagerImpl implements DataConnectorOracleManager {
 
-    private CriteriaBuilderImpl builder;    
+    private final AbstractCriteriaBuilderImpl builder;
+    private final DataConnectorConWrap connector;
 
-    public DataConnectorOracleManagerImpl(CriteriaBuilder builder) {
-        this.builder = (CriteriaBuilderImpl)builder;
+    public DataConnectorOracleManagerImpl(CriteriaBuilder builder, DataConnectorConWrap connector) {
+        this.builder = (AbstractCriteriaBuilderImpl) builder;
         this.builder.setDriver(ProvidersSupportEnum.ORACLE);
+        this.connector = connector;
     }
-    
-    
-    
-    
+
     @Override
-    public  CriteriaBuilder getCriterialBuilder() {
+    public CriteriaBuilder getCriterialBuilder() {
         return builder;
     }
 
     @Override
     public String QuiEst() {
-       return "DataConnectorOracleManager";
-    }
-
-    @Override
-    public Query createQuery(CriteriaQueryOracle q) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "DataConnectorOracleManager";
     }
 
     @Override
@@ -65,6 +62,11 @@ public class DataConnectorOracleManagerImpl implements DataConnectorOracleManage
 
     @Override
     public Connection getConnection() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Query createQuery(CriteriaQuery q) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

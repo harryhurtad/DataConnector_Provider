@@ -6,7 +6,9 @@
 package com.dataconnector.excecution;
 
 import com.dataconnector.core.DataConnectorFactoryImpl;
+import com.dataconnector.exceptions.InitialCtxDataConnectorException;
 import com.dataconnector.helper.DataConnectorHelper;
+import com.dataconnector.manager.InitialContextDataConnector;
 import com.dataconnector.obj.DetailMapObjDataConnector;
 import com.dataconnector.obj.ParameterConstructClass;
 import com.dataconnector.obj.ParameterImpl;
@@ -93,8 +95,8 @@ public class ExcecuteHelper<X> {
      }
     
 
-    public List<X> resulsetQueryObjDataConnector(ResultSet rs, Class objClass, Set<Map.Entry<String, Class>> listValues) throws SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
-        Map<String, DetailMapObjDataConnector> mapDetailObj = DataConnectorFactoryImpl.mapObjectProccess.get(objClass.getName());
+    public List<X> resulsetQueryObjDataConnector(ResultSet rs, Class objClass, Set<Map.Entry<String, Class>> listValues) throws SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException, InitialCtxDataConnectorException {
+        Map<String, DetailMapObjDataConnector> mapDetailObj = (Map<String, DetailMapObjDataConnector>)DataConnectorFactoryImpl.getInitialContext().getMapObjectProccess().get(objClass.getName());
         List<X> listObjReturn = new ArrayList();
         Object valueReturn = null;
         while (rs.next()) {
@@ -110,26 +112,28 @@ public class ExcecuteHelper<X> {
 
                 if (entry.getValue().equals(String.class)) {
                     valueReturn = rs.getString(entry.getKey());
-
                 } else if (entry.getValue().equals(Integer.class)) {
                     valueReturn = rs.getInt(entry.getKey());
                 } else if (entry.getValue().equals(Double.class)) {
                     valueReturn = rs.getDouble(entry.getKey());
                 } else if (entry.getValue().equals(BigDecimal.class)) {
-                    valueReturn = rs.getBigDecimal(entry.getKey());
+                    valueReturn = rs.getBigDecimal(entry.getKey());                
                 } else if (entry.getValue().equals(Float.class)) {
                     valueReturn = rs.getFloat(entry.getKey());
                 } else if (entry.getValue().equals(Time.class)) {
                     valueReturn = rs.getTime(entry.getKey());
                 } else if (entry.getValue().equals(java.util.Date.class)) {
                     valueReturn = rs.getDate(entry.getKey());
-
                 } else if (entry.getValue().equals(java.sql.Date.class)) {
                     valueReturn = rs.getDate(entry.getKey());
+                }else if (entry.getValue().equals(java.math.BigInteger.class)) {
+                     valueReturn = java.math.BigInteger.class.getConstructor(new Class[]{String.class}).newInstance(new Object[]{rs.getString(entry.getKey())});;
+                 
                 }
+                
                 try {
                     //Set el valor retornado de la instancia
-                    DataConnectorHelper.getInstance().invokeMethod(objReturn, objClass.getName(), new Class[]{detail.getCampo().getType()}, detail.getMetodo().getName(), valueReturn);
+                    DataConnectorHelper.getInstance().invokeMethod(objReturn, objClass.getName(), new Class[]{detail.getCampo().getType()}, detail.getMetodo().getName(), new Object[]{valueReturn});
 
                 } catch (Exception e) {
 

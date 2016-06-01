@@ -8,6 +8,7 @@ package com.dataconnector.translation;
 import com.dataconnector.criteria.AbstractQuery;
 import com.dataconnector.criteria.CriteriaQuery;
 import com.dataconnector.criterial.generic.CriteriaQueryImpl;
+import com.dataconnector.query.Query;
 import com.dataconnector.obj.TranslatePagination;
 import com.dataconnector.sql.FromImpl;
 import com.dataconnector.utils.Constantes;
@@ -24,7 +25,7 @@ public class TranslateSelectMySQL implements TranslateSelect {
     private final String LIMIT = "LIMIT :" + Constantes.POSICION_INICIAL + ",:" + Constantes.POSICION_FINAL;
 
     @Override
-    public String translate(AbstractQuery query) {
+    public String translate(AbstractQuery query,Query postQuery) {
         StringBuilder selectStatement = new StringBuilder();
         CriteriaQuery q = (CriteriaQuery) query;
         CriteriaQueryImpl implQ = (CriteriaQueryImpl) q;

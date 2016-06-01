@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class SelectImpl implements TupleSQL {
 
-    private final StringBuilder sql;
+    private StringBuilder sql;
     private final List<Selection> listParametros;
     private int contadorAlias = 0;
     private final Class classToCreate;
@@ -31,7 +31,7 @@ public class SelectImpl implements TupleSQL {
     public SelectImpl(Class param) {
         sql = new StringBuilder();
         this.listParametros = new ArrayList();
-        this.classToCreate=param;
+        this.classToCreate = param;
         //proccess(listParametros);
     }
 
@@ -41,26 +41,7 @@ public class SelectImpl implements TupleSQL {
         //adiciona los campos al select
         for (int contador = 0; contador < params.length; contador++) {
             //Evalua para el subquery
-            if (params[contador] instanceof SubQuery) {
-                SubQueryImpl subq = (SubQueryImpl) (params[contador]);
-                //Evalua si tiene un alias
-                if (subq.getAlias().equals("")) {
-                    subq.alias(Constantes.NOMBRE_ALIAS_CAMPO + contadorAlias);
-                    contadorAlias++;
-                }
-                subq.proccess();
-            }
-            
-            if (params[contador] instanceof ValueRoot) {
-                ValueRoot valueRoot=(ValueRoot) (params[contador]);
-                 if (valueRoot.getAlias().equals("")) {
-                    valueRoot.alias(Constantes.NOMBRE_ALIAS_CAMPO + contadorAlias);                   
-                    contadorAlias++;
-                }
-                  valueRoot.proccessAlias();
-            }
-
-            sql.append(params[contador].getSQLTransalte());
+            proccessSelection(params[contador],true);
             if (((contador + 1) < params.length) && (params.length > 1)) {
                 sql.append(Constantes.COMA);
             }
@@ -69,15 +50,51 @@ public class SelectImpl implements TupleSQL {
 
     }
 
+    public void proccessSelection(Selection element, boolean proccess) {
+
+        if (element instanceof SubQuery) {
+            SubQueryImpl subq = (SubQueryImpl) (element);
+            //Evalua si tiene un alias
+            if (subq.getAlias().equals("")) {
+                subq.alias(Constantes.NOMBRE_ALIAS_CAMPO + contadorAlias);
+                contadorAlias++;
+            }
+            if (proccess) {
+                subq.proccess();
+            }
+        }
+
+        if (element instanceof ValueRoot) {
+            ValueRoot valueRoot = (ValueRoot) (element);
+            if (valueRoot.getAlias().equals("")) {
+                valueRoot.alias(Constantes.NOMBRE_ALIAS_CAMPO + contadorAlias);
+                contadorAlias++;
+            }
+            if (proccess) {
+                valueRoot.proccessAlias();
+            }
+        }
+
+        sql.append(element.getSQLTransalte());
+
+    }
+
+    public void proccess() {
+        sql = new StringBuilder();
+        sql.append(getTypeElementSQL().getNameElement());
+        sql.append(Constantes.ESPACIO);
+        for (int contador = 0; contador < listParametros.size(); contador++) {
+            proccessSelection(listParametros.get(contador),false);
+            if (((contador + 1) < listParametros.size()) && (listParametros.size() > 1)) {
+                sql.append(Constantes.COMA);
+            }          
+        }
+    }
+
     public Class getClassToCreate() {
         return classToCreate;
     }
 
-   
-    
-
-    
-    
     public List<Selection> getListParametros() {
         return listParametros;
     }

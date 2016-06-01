@@ -6,11 +6,15 @@
 package com.dataconnector.translation;
 
 import com.dataconnector.connection.MetaDataDataconnector;
+import com.dataconnector.constans.DataConnectorConstants;
 import com.dataconnector.core.DataConnectorFactoryImpl;
 import com.dataconnector.criteria.AbstractQuery;
+import com.dataconnector.exceptions.InitialCtxDataConnectorException;
 import com.dataconnector.manager.DataConnector;
 import com.dataconnector.manager.DataConnectorFactory;
+import com.dataconnector.query.Query;
 import com.dataconnector.obj.TranslatePagination;
+import com.dataconnector.constans.ProvidersSupportEnum;
 import com.dataconnector.sql.Selection;
 import com.dataconnector.utils.Constantes;
 
@@ -37,44 +41,52 @@ public class TranslatorHelper {
         return instance;
     }
 
-    public String translateStatementByDriver(AbstractQuery query) {
-        TranslateSelect translate;
+    public String translateStatementByDriver(AbstractQuery query, Query postQuery) throws InitialCtxDataConnectorException {
+        TranslateSelect translate = null;
         String sql = null;
         // if(element instanceof Equ)
-        MetaDataDataconnector metadata = DataConnectorFactoryImpl.getDataDataconnector();
-        switch (metadata.getNameClassDriver()) {
-            case Constantes.DRIVER_MYSQL:
-                translate = new TranslateSelectMySQL();
-                sql = translate.translate(query);
-                break;
-            case Constantes.DRIVER_ORACLE:
-                break;
-            case Constantes.DRIVER_SQLSERVER:
-                break;
+        MetaDataDataconnector metadata = DataConnectorFactoryImpl.getInitialContext().getDataDataconnector();
+        switch (metadata.getTypeDatabase()) {
+            case SQLSERVER:
+                translate = new TranslateSelectSqlServer();
+               
+            
+            case GENERIC:
+                if (metadata.getNameTypeDriver().equals(DataConnectorConstants.DRIVER_MYSQL)) {
+                    translate = new TranslateSelectMySQL();
+                }
+               
+            case ORACLE:
+
+           
             default:
+                sql = translate.translate(query, postQuery);
                 break;
         }
 
         return sql;
     }
 
-    public TranslatePagination translatePagValueByDriver(Integer posicionInicial, Integer posicionFinal) {
-        TranslateSelect translate;
+    public TranslatePagination translatePagValueByDriver(Integer posicionInicial, Integer posicionFinal) throws InitialCtxDataConnectorException {
+        TranslateSelect translate = null;
         TranslatePagination pag = null;
-        MetaDataDataconnector metadata = DataConnectorFactoryImpl.getDataDataconnector();
-        switch (metadata.getNameClassDriver()) {
-            case Constantes.DRIVER_MYSQL:
+        MetaDataDataconnector metadata = DataConnectorFactoryImpl.getInitialContext().getDataDataconnector();
+        switch (metadata.getNameTypeDriver()) {
+            case DataConnectorConstants.DRIVER_MYSQL:
                 translate = new TranslateSelectMySQL();
-                pag = translate.pagination(posicionInicial, posicionFinal);
                 break;
-            case Constantes.DRIVER_ORACLE:
+            case DataConnectorConstants.DRIVER_ORACLE:
                 break;
-            case Constantes.DRIVER_SQLSERVER:
+            case DataConnectorConstants.DRIVER_SQLSERVER:
+                translate = new TranslateSelectSqlServer();
+
                 break;
             default:
                 break;
         }
-
+        if (translate != null) {
+            pag = translate.pagination(posicionInicial, posicionFinal);
+        }
         return pag;
 
     }

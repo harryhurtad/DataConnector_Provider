@@ -13,10 +13,8 @@ import com.dataconnector.criteria.insert.CommonAbstractInsert;
 import com.dataconnector.criteria.update.CommonAbstractUpdate;
 import com.dataconnector.criterial.generic.CriteriaQueryImpl;
 import com.dataconnector.criterial.generic.SubQueryImpl;
-import com.dataconnector.criterial.oracle.CriteriaQueryOracleImpl;
-import com.dataconnector.criterial.sqlserver.CriteriaQuerySQLServerImpl;
 import com.dataconnector.obj.ParameterImpl;
-import com.dataconnector.object.ProvidersSupportEnum;
+import com.dataconnector.constans.ProvidersSupportEnum;
 import com.dataconnector.object.ValueExpression;
 import com.dataconnector.object.ValueRoot;
 import com.dataconnector.sql.Expression;
@@ -43,7 +41,7 @@ import com.dataconnector.sql.ParameterExpression;
  * @since build 23/02/2016
  * @author proveedor_hhurtado email: proveedor_hhurtad@ath.com.co
  */
-public class CriteriaBuilderImpl implements CriteriaBuilder {
+public abstract class  AbstractCriteriaBuilderImpl implements CriteriaBuilder {
 
     private ProvidersSupportEnum driver;
 
@@ -152,36 +150,21 @@ public class CriteriaBuilderImpl implements CriteriaBuilder {
     public AbstractQuery createQuery(Class param) {
         AbstractQuery query;
     
-        switch (getDriver()) {
-               
-            case ORACLE:
-                query = new CriteriaQueryOracleImpl();
-                break;
-            case SQLSERVER:
-                query = new CriteriaQuerySQLServerImpl();
-                break;
-            default:
                 query = new CriteriaQueryImpl(param);
-                break;
-        }
+       
 
         return query;
     }
 
     @Override
-    public CommonAbstractInsert createInserQueryFactory() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public abstract CommonAbstractInsert createInserQuery();
+    
 
     @Override
-    public CommonAbstractDelete createDeleterQueryFactory() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public abstract CommonAbstractDelete createDeleterQueryFactory() ;
 
     @Override
-    public CommonAbstractUpdate createUpdaterQueryFactory() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public abstract CommonAbstractUpdate createUpdaterQueryFactory();
 
     public ProvidersSupportEnum getDriver() {
         return driver;
@@ -211,6 +194,12 @@ public class CriteriaBuilderImpl implements CriteriaBuilder {
 
     @Override
     public JoinPredicate equal(ValueRoot param1, ValueRoot param2) {
+        EqualsOperation equalsOperation = new EqualsOperation();
+        return equalsOperation.translateJoinOperation(param1, param2);
+    }
+    
+      @Override
+    public JoinPredicate equal(ValueRoot param1, Expression param2) {
         EqualsOperation equalsOperation = new EqualsOperation();
         return equalsOperation.translateJoinOperation(param1, param2);
     }

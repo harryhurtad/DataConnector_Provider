@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Clase Abstracta que representa el conjunto de operaciones comunes soportadas por SQL
+ * Clase Abstracta que representa el conjunto de operaciones comunes soportadas
+ * por SQL
  *
  * @version $Revision: 1.1.1 (UTF-8)
  * @since build 26/02/2016
@@ -61,8 +62,8 @@ public abstract class AbstractOperPredicate implements Predicate {
     }
 
     /**
-     * 
-     * @param parameters 
+     *
+     * @param parameters
      */
     public void proccessTranslate(Predicate[] parameters) {
         sql.append(Constantes.PARENTECIS_IZQUIERDO);
@@ -71,17 +72,17 @@ public abstract class AbstractOperPredicate implements Predicate {
         int contador = 0;
         while (cantidadElemProces > 0) {
             Predicate p1 = parameters[contador++];
-            Predicate p2 = parameters[contador++];
+
             evaluatePredicate(p1);
-            evaluatePredicate(p2);
+
             sql.append(proccesElement(p1));
             sql.append(Constantes.ESPACIO);
-            sql.append(operacion.getSimboloOper());
-            sql.append(proccesElement(p2));
-            sql.append(Constantes.ESPACIO);
-            listParameters.add(p1);
-            listParameters.add(p2);
-            cantidadElemProces -= 2;
+            if (cantidadElemProces != 1) {
+                sql.append(operacion.getSimboloOper());
+                sql.append(Constantes.ESPACIO);
+                listParameters.add(p1);
+            }
+            cantidadElemProces -= 1;
         }
         sql.append(Constantes.ESPACIO);
         sql.append(Constantes.PARENTECIS_DERECHO);

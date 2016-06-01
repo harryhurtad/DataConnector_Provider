@@ -43,6 +43,9 @@ public final class EqualsOperation extends AbstractOperPredicate implements Join
         return this;
     }
 
-   
+    public JoinPredicate  translateJoinOperation(ValueRoot param1, Expression param2){
+         proccessTranslate(param1, param2);
+         return this;
+    }
 
 }

@@ -19,22 +19,20 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
  */
 public class DataConnectorProvider implements ProviderDataConnector {
 
- 
-
     public void initialContext() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         //Evaluar varaibles de retorno
-        String basePackage="";
-        final Set<String> scannedComponents = new HashSet<String>(); 
+        String basePackage = "";
+        final Set<String> scannedComponents = new HashSet<String>();
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(true);
         scanner.addIncludeFilter(new AnnotationTypeFilter(DataConnectorPOJO.class));
         collectComponentsInClasspath(basePackage, scannedComponents, scanner);
-         System.out.println("Clases escaneada...");
-        for(String nameClass: scannedComponents){
-        
-            System.out.println("Clase:"+nameClass);
+        System.out.println("Clases escaneada...");
+        for (String nameClass : scannedComponents) {
+
+            System.out.println("Clase:" + nameClass);
         }
-        
+
     }
 
     private void collectComponentsInClasspath(String basePackage, final Set<String> scannedComponents, ClassPathScanningCandidateComponentProvider scanner) {
@@ -43,13 +41,13 @@ public class DataConnectorProvider implements ProviderDataConnector {
         }
     }
 
-   /* private void removeComponentsInPackages(final Set<String> scannedComponents) {
-        for (String scannedComponent : scannedComponents) {
-            for (String ignoredPackage : ignoredPackages) {
-                if (scannedComponent.startsWith(ignoredPackage)) {
-                    ignoredClassNames.add(scannedComponent);
-                }
-            }
-        }
-    }*/
+    /* private void removeComponentsInPackages(final Set<String> scannedComponents) {
+     for (String scannedComponent : scannedComponents) {
+     for (String ignoredPackage : ignoredPackages) {
+     if (scannedComponent.startsWith(ignoredPackage)) {
+     ignoredClassNames.add(scannedComponent);
+     }
+     }
+     }
+     }*/
 }

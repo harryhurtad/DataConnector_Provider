@@ -5,6 +5,7 @@
  */
 package com.dataconnector.excecution;
 
+import com.dataconnector.exceptions.InitialCtxDataConnectorException;
 import com.dataconnector.manager.AbstractDataConnectorManager;
 import com.dataconnector.obj.ParameterConstructClass;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +42,7 @@ public class ExcecuteSelectSingleStatementSQL<X> {
     }
     
    
-    public List<X> excecuteSQLStatement(Class objReturn, String sql) throws SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
+    public List<X> excecuteSQLStatement(Class objReturn, String sql) throws SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException, InitialCtxDataConnectorException {
 
         NamedParameterStatement namedParameterStatement;
         List<X> listObjReturn = null;

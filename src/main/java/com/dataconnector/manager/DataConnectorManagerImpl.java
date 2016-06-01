@@ -5,7 +5,8 @@
  */
 package com.dataconnector.manager;
 
-import com.dataconnector.builder.CriteriaBuilderImpl;
+import com.dataconnector.query.Query;
+import com.dataconnector.builder.AbstractCriteriaBuilderImpl;
 import com.dataconnector.common.ConnectionHelper;
 import com.dataconnector.criteria.CriteriaQuery;
 import com.dataconnector.criteria.delete.CriteriaDelete;
@@ -13,8 +14,9 @@ import com.dataconnector.criteria.insert.CriteriaInsert;
 import com.dataconnector.criteria.update.CriteriaUpdate;
 import com.dataconnector.criterial.generic.CriteriaQueryImpl;
 import com.dataconnector.excecution.SelectQueryImpl;
+import com.dataconnector.helper.DataConnectorConWrap;
 import com.dataconnector.helper.ValidateSelectQuery;
-import com.dataconnector.object.ProvidersSupportEnum;
+import com.dataconnector.constans.ProvidersSupportEnum;
 import com.dataconnector.sql.CriteriaBuilder;
 import java.sql.Connection;
 
@@ -27,11 +29,13 @@ import java.sql.Connection;
  */
 public class DataConnectorManagerImpl implements DataConnectorManager {
 
-    private final CriteriaBuilderImpl builder;  
+    private final AbstractCriteriaBuilderImpl builder; 
+     private final DataConnectorConWrap connector;
 
-    public DataConnectorManagerImpl(CriteriaBuilder builder) {
-        this.builder = (CriteriaBuilderImpl) builder;
+    public DataConnectorManagerImpl(CriteriaBuilder builder,DataConnectorConWrap connector) {
+        this.builder = (AbstractCriteriaBuilderImpl) builder;
         this.builder.setDriver(ProvidersSupportEnum.GENERIC);
+        this.connector=connector;
     }
 
     @Override
@@ -79,7 +83,7 @@ public class DataConnectorManagerImpl implements DataConnectorManager {
 
     @Override
     public Connection getConnection() {
-       return ConnectionHelper.getConnection();
+       return connector.getConnection();
     }
 
 }

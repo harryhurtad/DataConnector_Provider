@@ -7,6 +7,7 @@
 package com.dataconnector.translation;
 
 import com.dataconnector.criteria.AbstractQuery;
+import com.dataconnector.query.Query;
 import com.dataconnector.obj.TranslatePagination;
 
 /**
@@ -17,7 +18,7 @@ import com.dataconnector.obj.TranslatePagination;
  */
 public interface TranslateSelect {
 
-    String translate(AbstractQuery query);
+    String translate(AbstractQuery query,Query postQuery);
     TranslatePagination pagination(int posicionInicial,int posicionFinal);
     
 }

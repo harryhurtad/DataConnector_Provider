@@ -25,12 +25,23 @@ public class Constantes {
     public static String SALTO_DE_LINEA = "\n";
     public static String ALIAS="AS";
     public static String NOMBRE_ALIAS_CAMPO="F";
+    public static final String OVER_OPERATOR="OVER";
+    public static final String ALIAS_PAGINATION_SQL_SERVER="NUMEROCALDA";
+    public static final String ALIAS_TABLE_SQL_SERVER="TMP_TABLE";
+    public static final String ALIAS_CANTIDAD="CANTIDAD";
     public static String POSICION_INICIAL="posicionInicial";
     public static String POSICION_FINAL="posicionFinal";
+    
     public static String MSN_EXCEPTION_INITIAL_CONTEXT_MAPEO="ERROR AL ANALIZAR LA CLASE A MAPEAR: Verifique que los atributos que usan la anotacion @DataConnectorAttributes tengan su correspondiente accesor set( Ejemplo String deptNo ,  public void setDeptNo(String deptNo))";
     public static String MSN_EXCEPTION_VALIDATE_QUERY="No se encuentra el mapeo correspondiente en el query de los sigueintes elementos:";
-
-    public static final  String DRIVER_MYSQL="com.mysql.jdbc.Driver";
-    public static final String DRIVER_ORACLE="oracle.jdbc.driver.OracleDriver";
-    public static  final String DRIVER_SQLSERVER="com.microsoft.sqlserver.jdbc.SQLServerDriver";
+    
+    
+    
+ 
+    
+    //Funciones
+    public static final String ROWN_NUMBER_FUNCTION="ROW_NUMBER()";
+    
+    public static final String FILE_NAME_PROPERTIES_DATACONNECTOR="conf/dataconnector.properties";
+    
 }
