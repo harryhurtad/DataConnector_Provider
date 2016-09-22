@@ -5,6 +5,7 @@
  */
 package com.dataconnector.manager;
 
+
 import com.dataconnector.query.Query;
 import com.dataconnector.builder.AbstractCriteriaBuilderImpl;
 import com.dataconnector.common.ConnectionHelper;
@@ -14,10 +15,11 @@ import com.dataconnector.criteria.insert.CriteriaInsert;
 import com.dataconnector.criteria.update.CriteriaUpdate;
 import com.dataconnector.criterial.generic.CriteriaQueryImpl;
 import com.dataconnector.excecution.SelectQueryImpl;
-import com.dataconnector.helper.DataConnectorConWrap;
 import com.dataconnector.helper.ValidateSelectQuery;
 import com.dataconnector.constans.ProvidersSupportEnum;
+import com.dataconnector.context.ContextDataConnectorImpl;
 import com.dataconnector.sql.CriteriaBuilder;
+import com.dataconnector.wrapper.DataConnectorConWrap;
 import java.sql.Connection;
 
 /**
@@ -30,12 +32,15 @@ import java.sql.Connection;
 public class DataConnectorManagerImpl implements DataConnectorManager {
 
     private final AbstractCriteriaBuilderImpl builder; 
-     private final DataConnectorConWrap connector;
+     private  DataConnectorConWrap connector;
+     private final ContextDataConnectorImpl context;
+     
 
-    public DataConnectorManagerImpl(CriteriaBuilder builder,DataConnectorConWrap connector) {
+    public DataConnectorManagerImpl(CriteriaBuilder builder,ContextDataConnectorImpl context) {
         this.builder = (AbstractCriteriaBuilderImpl) builder;
         this.builder.setDriver(ProvidersSupportEnum.GENERIC);
-        this.connector=connector;
+        this.context=context;
+     //   this.connector=connector;
     }
 
     @Override
@@ -84,6 +89,18 @@ public class DataConnectorManagerImpl implements DataConnectorManager {
     @Override
     public Connection getConnection() {
        return connector.getConnection();
+    }
+
+  
+    
+    @Override
+    public ProvidersSupportEnum getProvidersSupportEnum() {
+        return ProvidersSupportEnum.GENERIC;
+    }
+
+    @Override
+    public ContextDataConnectorImpl getContext() {
+        return context;
     }
 
 }

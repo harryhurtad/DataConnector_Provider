@@ -15,9 +15,10 @@ import com.dataconnector.criterial.generic.CriteriaQueryImpl;
 import com.dataconnector.criterial.generic.SubQueryImpl;
 import com.dataconnector.obj.ParameterImpl;
 import com.dataconnector.constans.ProvidersSupportEnum;
+import com.dataconnector.context.ContextDataConnectorImpl;
 import com.dataconnector.object.ValueExpression;
 import com.dataconnector.object.ValueRoot;
-import com.dataconnector.sql.Expression;
+import com.dataconnectorcommons.sql.Expression;
 import com.dataconnector.sql.Predicate;
 import com.dataconnector.operations.AndOperation;
 import com.dataconnector.operations.BetweenOperation;
@@ -44,7 +45,16 @@ import com.dataconnector.sql.ParameterExpression;
 public abstract class  AbstractCriteriaBuilderImpl implements CriteriaBuilder {
 
     private ProvidersSupportEnum driver;
+    private ContextDataConnectorImpl context;
 
+    public AbstractCriteriaBuilderImpl(){
+    
+    }
+    
+    public AbstractCriteriaBuilderImpl(ContextDataConnectorImpl context){
+        this.context=context;
+    } 
+    
     @Override
     public Predicate getConjuncion() {
         return new AndOperation();
@@ -150,7 +160,7 @@ public abstract class  AbstractCriteriaBuilderImpl implements CriteriaBuilder {
     public AbstractQuery createQuery(Class param) {
         AbstractQuery query;
     
-                query = new CriteriaQueryImpl(param);
+                query = new CriteriaQueryImpl(param,context);
        
 
         return query;
@@ -262,8 +272,8 @@ public abstract class  AbstractCriteriaBuilderImpl implements CriteriaBuilder {
 
     @Override
     public SubQuery createSubQuery(Class typeValueReturn) {
-        SubQueryImpl impl=new SubQueryImpl(typeValueReturn);
+        SubQueryImpl impl=new SubQueryImpl(typeValueReturn,context);
         return impl;
     }
-
+    
 }

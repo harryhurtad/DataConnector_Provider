@@ -5,6 +5,7 @@
  */
 package com.dataconnector.sql;
 
+import com.dataconnectorcommons.sql.Selection;
 import com.dataconnector.commons.ElementSQLEnum;
 import com.dataconnector.commons.TupleSQL;
 import com.dataconnector.criteria.SubQuery;

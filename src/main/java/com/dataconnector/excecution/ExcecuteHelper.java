@@ -7,7 +7,8 @@ package com.dataconnector.excecution;
 
 import com.dataconnector.core.DataConnectorFactoryImpl;
 import com.dataconnector.exceptions.InitialCtxDataConnectorException;
-import com.dataconnector.helper.DataConnectorHelper;
+import com.dataconnector.commons.helper.DataConnectorHelper;
+import com.dataconnector.context.InitialContextDataconnectorImpl;
 import com.dataconnector.manager.InitialContextDataConnector;
 import com.dataconnector.obj.DetailMapObjDataConnector;
 import com.dataconnector.obj.ParameterConstructClass;
@@ -96,7 +97,7 @@ public class ExcecuteHelper<X> {
     
 
     public List<X> resulsetQueryObjDataConnector(ResultSet rs, Class objClass, Set<Map.Entry<String, Class>> listValues) throws SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException, InitialCtxDataConnectorException {
-        Map<String, DetailMapObjDataConnector> mapDetailObj = (Map<String, DetailMapObjDataConnector>)DataConnectorFactoryImpl.getInitialContext().getMapObjectProccess().get(objClass.getName());
+        Map<String, DetailMapObjDataConnector> mapDetailObj = (Map<String, DetailMapObjDataConnector>)InitialContextDataconnectorImpl.mapObjectProccess.get(objClass.getName());
         List<X> listObjReturn = new ArrayList();
         Object valueReturn = null;
         while (rs.next()) {

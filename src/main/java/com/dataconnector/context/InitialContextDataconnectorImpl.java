@@ -7,30 +7,49 @@ package com.dataconnector.context;
 
 import com.dataconnector.annotation.DataConnectorAttributes;
 import com.dataconnector.annotation.DataConnectorPOJO;
+import com.dataconnector.commons.anotations.MetadataFielInfoDataConnector;
 import com.dataconnector.connection.MetaDataDataconnector;
 import com.dataconnector.core.DataConnectorFactoryImpl;
 import com.dataconnector.exceptions.InitialCtxDataConnectorException;
-import com.dataconnector.helper.DataConnectorConWrap;
-import com.dataconnector.helper.DataConnectorHelper;
+import com.dataconnector.commons.helper.DataConnectorHelper;
+import com.dataconnector.commons.metadata.MetdataTableDataConn;
+import com.dataconnector.commons.xml.ProccessXMLDataConnector;
+import com.dataconnector.constans.ProvidersSupportEnum;
 import com.dataconnector.manager.InitialContextDataConnector;
 import com.dataconnector.obj.DetailMapObjDataConnector;
+import com.dataconnector.params.obj.ConnectionConf;
+import com.dataconnector.params.obj.ContextConf;
+import com.dataconnector.params.obj.DataConnectorConf;
 import com.dataconnector.utils.Constantes;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.util.StringUtils;
 
 /**
@@ -40,54 +59,53 @@ import org.springframework.util.StringUtils;
  * @since build 27/04/2016
  * @author proveedor_hhurtado email: proveedor_hhurtad@ath.com.co
  */
-
 public class InitialContextDataconnectorImpl implements InitialContextDataConnector {
 
- 
-    public Map<String, Map<String, DetailMapObjDataConnector>> mapObjectProccess;
-    private  MetaDataDataconnector dataDataconnector;
-    private DataConnectorConWrap connection;
+    public static  Map<String, Map<String, DetailMapObjDataConnector>> mapObjectProccess;
+    private MetaDataDataconnector dataDataconnector;
+    public  static  Map<String, ContextDataConnectorImpl> mapContext;
 
-    public InitialContextDataconnectorImpl(DataConnectorConWrap connection) {
-           this.connection=connection;
-           mapObjectProccess = new HashMap<>();
+    private final InputStream dataConnectorDesc;
+
+    public InitialContextDataconnectorImpl(InputStream dataConnectorDesc) {
+        this.dataConnectorDesc = dataConnectorDesc;
+        mapObjectProccess = new HashMap<>();
+        mapContext = new HashMap<>();
+
     }
 
-
-    
-    
-    @Override
-    public Map<String, Map<String, DetailMapObjDataConnector>> getMapObjectProccess(){
-    
-        return mapObjectProccess;
-    
-    }
+   
 
     @Override
     public void initialContext() throws InitialCtxDataConnectorException {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-       DataConnectorHelper.getInstance().printInitDataConnector();
+        DataConnectorHelper.getInstance().printInitDataConnector();
         //Obtiene los metadatos de la BD
-        System.out.println("->OBTENIENDO METADATA DE LA BD.........");
-        String nameSchemma="";
+        //   System.out.println("->OBTENIENDO METADATA DE LA BD.........");       
         String basePackage = "";
-        try {
-            Properties prop = DataConnectorHelper.getInstance().readPropertiesDataConnector(Constantes.FILE_NAME_PROPERTIES_DATACONNECTOR);
-            nameSchemma=prop.getProperty("nameShemma");
-            basePackage=prop.getProperty("packageBase");
-            if(nameSchemma==null){}
-        } catch (IOException ex) {
-            Logger.getLogger(InitialContextDataconnectorImpl.class.getName()).log(Level.SEVERE, null, ex);
-            throw new InitialCtxDataConnectorException("Problemas el archivo de propiedades del dataconnector");
-        } 
-         System.out.println("****Prueba!!!***");
-        dataDataconnector = new MetaDataDataconnector(nameSchemma, connection.getConnection(), connection.getDriverName(),connection.getProvider());
-        dataDataconnector.obtieneMetaDataBD();
-        System.out.println("****FIN OBTENIENCION METADATA DE LA BD***");
-        //Evaluar varaibles de retorno
+
         
+            // Procesa el archivo xml 
+            ProccessXMLDataConnector xMLDataConnector = new ProccessXMLDataConnector();
+            DataConnectorConf conf = new DataConnectorConf();
+            xMLDataConnector.readDocumentXMLDataconnector(dataConnectorDesc, conf);
+            //
+            //Crea la informacion para el contexto
+            basePackage = conf.getPackage_base();
+            for (ContextConf context : conf.getContext()) {
+
+                ContextDataConnectorImpl contextTmp = new ContextDataConnectorImpl(context);
+                mapContext.put(context.getContextName(), contextTmp);
+
+            }
 
        
+        //  typeDatabase=connection.getProvider();
+        // dataDataconnector = new MetaDataDataconnector(nameSchemma, connection.getConnection(), connection.getDriverName(),connection.getProvider());
+        // dataDataconnector.obtieneMetaDataBD();
+        //   System.out.println("****FIN OBTENIENCION METADATA DE LA BD***");
+        //Evaluar varaibles de retorno
+
         final Set<String> scannedComponents = new HashSet<>();
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(true);
         scanner.addIncludeFilter(new AnnotationTypeFilter(DataConnectorPOJO.class));
@@ -102,6 +120,7 @@ public class InitialContextDataconnectorImpl implements InitialContextDataConnec
                 Logger.getLogger(DataConnectorFactoryImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+      
         System.out.println(mapObjectProccess);
 
     }
@@ -155,14 +174,10 @@ public class InitialContextDataconnectorImpl implements InitialContextDataConnec
         }
 
     }
-    
-  
-    public  MetaDataDataconnector getDataDataconnector() {
-        return dataDataconnector;
-    }
 
-    @Override
-    public DataConnectorConWrap getDataConnectorConWrap(){
-            return this.connection;
-    }
+   
+
+    
+    
+
 }

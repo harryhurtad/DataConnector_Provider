@@ -10,7 +10,6 @@ import com.dataconnector.builder.CriteriaGenericBuilderImpl;
 import com.dataconnector.builder.CriteriaSQLServerBuilderImpl;
 import com.dataconnector.context.InitialContextDataconnectorImpl;
 import com.dataconnector.exceptions.InitialCtxDataConnectorException;
-import com.dataconnector.helper.DataConnectorConWrap;
 import com.dataconnector.sql.CriteriaBuilder;
 import com.dataconnector.manager.AbstractDataConnectorManager;
 import com.dataconnector.manager.DataConnectorManager;
@@ -20,6 +19,8 @@ import com.dataconnector.manager.DataConnectorOracleManagerImpl;
 import com.dataconnector.manager.DataConnectorSQLServerManager;
 import com.dataconnector.manager.DataConnectorSQLServerManagerImpl;
 import com.dataconnector.constans.ProvidersSupportEnum;
+import com.dataconnector.context.ContextDataConnectorImpl;
+
 
 import com.dataconnector.manager.DataConnectorFactory;
 import com.dataconnector.manager.InitialContextDataConnector;
@@ -34,48 +35,45 @@ import com.dataconnector.manager.InitialContextDataConnector;
  */
 public class DataConnectorFactoryImpl implements DataConnectorFactory {
 
-    private  AbstractDataConnectorManager instanceManager;
-   
-    private static  InitialContextDataConnector context;
-  
+    private AbstractDataConnectorManager instanceManager;
 
-    public DataConnectorFactoryImpl(InitialContextDataConnector context) {
-       this.context=context;
+    private final  ContextDataConnectorImpl context;
+
+    public DataConnectorFactoryImpl(String dataConnectorUnitName) {
+        this.context = InitialContextDataconnectorImpl.mapContext.get(dataConnectorUnitName);
     }
 
- 
     @Override
     public AbstractDataConnectorManager getInstanceDataConnectorManager() {
         return instanceManager;
     }
 
-    
-
     /**
      * Obtiene el objeto manager de acuerdo al driver seleccionado
      *
-     * @param suport
-     * @param connector
+     * @param dataConnectorUnitName
      * @return implementacion de AbstractDataConnectorManager
      */
-    public AbstractDataConnectorManager getDataConnectorManager(ProvidersSupportEnum suport,DataConnectorConWrap connector) {
+    public AbstractDataConnectorManager getDataConnectorManager(String dataConnectorUnitName) {
 
         CriteriaBuilder builder = null;
+     
+        ContextDataConnectorImpl unitContext =(ContextDataConnectorImpl) context;
 
-        switch (suport) {
+        switch (unitContext.getProvider()) {
             case ORACLE:
-                builder=new CriteriaGenericBuilderImpl();//TODO Crear Implementacion
-                DataConnectorOracleManager dataConnectorOracleManager = new DataConnectorOracleManagerImpl(builder,connector);
+                builder = new CriteriaGenericBuilderImpl(unitContext);//TODO Crear Implementacion
+                DataConnectorOracleManager dataConnectorOracleManager = new DataConnectorOracleManagerImpl(builder,unitContext );
                 instanceManager = dataConnectorOracleManager;
                 break;
             case SQLSERVER:
-                builder=new CriteriaSQLServerBuilderImpl();
-                DataConnectorSQLServerManager dataConnectorSQLServerManagerImpl = new DataConnectorSQLServerManagerImpl(builder,connector);
+                builder = new CriteriaSQLServerBuilderImpl(unitContext);
+                DataConnectorSQLServerManager dataConnectorSQLServerManagerImpl = new DataConnectorSQLServerManagerImpl(builder, unitContext);
                 instanceManager = dataConnectorSQLServerManagerImpl;
                 break;
             default:
-                 builder=new CriteriaGenericBuilderImpl();//TODO Crear Implementacion
-                DataConnectorManager dataConnectorManagerImpl = new DataConnectorManagerImpl(builder,connector);
+                builder = new CriteriaGenericBuilderImpl(unitContext);//TODO Crear Implementacion
+                DataConnectorManager dataConnectorManagerImpl = new DataConnectorManagerImpl(builder, unitContext);
                 instanceManager = dataConnectorManagerImpl;
                 break;
         }
@@ -87,9 +85,7 @@ public class DataConnectorFactoryImpl implements DataConnectorFactory {
         this.instanceManager = manager;
     }
 
-  
-  
-    public  static InitialContextDataconnectorImpl getInitialContext() throws InitialCtxDataConnectorException {
-       return (InitialContextDataconnectorImpl)context;
+    public  ContextDataConnectorImpl getContext() throws InitialCtxDataConnectorException {
+        return  context;
     }
 }

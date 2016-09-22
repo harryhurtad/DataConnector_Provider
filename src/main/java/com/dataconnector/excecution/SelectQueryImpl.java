@@ -16,7 +16,7 @@ import com.dataconnector.obj.DetailMapObjDataConnector;
 import com.dataconnector.object.TemporalTypeEnum;
 import com.dataconnector.sql.FromImpl;
 import com.dataconnector.sql.SelectImpl;
-import com.dataconnector.sql.Selection;
+import com.dataconnectorcommons.sql.Selection;
 import com.dataconnector.sql.WhereImpl;
 import com.dataconnector.utils.Constantes;
 import java.util.Calendar;

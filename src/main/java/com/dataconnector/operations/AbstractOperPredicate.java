@@ -7,7 +7,7 @@ package com.dataconnector.operations;
 
 import com.dataconnector.criteria.SubQuery;
 import com.dataconnector.criterial.generic.SubQueryImpl;
-import com.dataconnector.sql.Expression;
+import com.dataconnectorcommons.sql.Expression;
 import com.dataconnector.sql.OperationEnum;
 import com.dataconnector.sql.Predicate;
 import com.dataconnector.utils.Constantes;

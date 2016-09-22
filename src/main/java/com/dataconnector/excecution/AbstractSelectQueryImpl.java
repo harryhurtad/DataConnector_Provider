@@ -6,6 +6,7 @@
 package com.dataconnector.excecution;
 
 import com.dataconnector.commons.ElementSQLEnum;
+import com.dataconnector.context.InitialContextDataconnectorImpl;
 import com.dataconnector.core.DataConnectorFactoryImpl;
 import com.dataconnector.criteria.AbstractQuery;
 import com.dataconnector.criteria.CriteriaQuery;
@@ -19,14 +20,14 @@ import com.dataconnector.obj.DetailMapObjDataConnector;
 import com.dataconnector.obj.ParameterImpl;
 import com.dataconnector.obj.TranslatePagination;
 import com.dataconnector.object.TemporalTypeEnum;
-import com.dataconnector.sql.Expression;
+import com.dataconnectorcommons.sql.Expression;
 import com.dataconnector.sql.FromImpl;
 import com.dataconnector.sql.Join;
 import com.dataconnector.sql.ParameterExpression;
 import com.dataconnector.sql.Predicate;
 import com.dataconnector.sql.Root;
 import com.dataconnector.sql.SelectImpl;
-import com.dataconnector.sql.Selection;
+import com.dataconnectorcommons.sql.Selection;
 import com.dataconnector.sql.WhereImpl;
 import com.dataconnector.sql.join.JoinsImpl;
 import com.dataconnector.translation.TranslatorHelper;
@@ -172,11 +173,13 @@ public abstract class AbstractSelectQueryImpl implements Query<Object> {
                     throw new DataConnectorResultException("Upss!! Problemas al cargar la dotos del InitialContext" + ex);
         }
         if (excecuteMulthiThread) {
+            
             try {
-                sql = TranslatorHelper.getInstance().translateStatementByDriver(query,this);
+                sql = TranslatorHelper.getInstance().translateStatementByDriver(query,this,manager.getContext());
             } catch (InitialCtxDataConnectorException ex) {
-                  throw new DataConnectorResultException("Upss!! Problemas al realizar la transformación de la sentencia sql" + ex);
+                Logger.getLogger(AbstractSelectQueryImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
             System.out.println("Query Paginado: " + sql);
             //Valida que el numero de registros no sea 0
             if (numeroRegistrosPorHilo <= 0) {
@@ -226,7 +229,7 @@ public abstract class AbstractSelectQueryImpl implements Query<Object> {
                         }
 
                         //Paginación de acuerdo al driver
-                        TranslatePagination pag = TranslatorHelper.getInstance().translatePagValueByDriver(posicionIni, posicionFinal);
+                        TranslatePagination pag = TranslatorHelper.getInstance().translatePagValueByDriver(posicionIni, posicionFinal,manager.getContext());
 
                         ExcecuteSelectThreadStatementSQL<Object> sentencia = new ExcecuteSelectThreadStatementSQL(pag.getPosicionInicial(), pag.getPosicionFinal(), manager, sql, mapParameter, mapValueReturn, query.getClassToCreate());
 
@@ -273,7 +276,7 @@ public abstract class AbstractSelectQueryImpl implements Query<Object> {
                     throw new DataConnectorResultException("Upss!! Problemas al ejecutar la sentencia multiHilo:" + ex);
                 } catch (InitialCtxDataConnectorException ex) {
                     Logger.getLogger(AbstractSelectQueryImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } 
             }
             //Cerrar servicio
             if (service != null) {
@@ -320,7 +323,7 @@ public abstract class AbstractSelectQueryImpl implements Query<Object> {
         SelectImpl selectImpl = impl.getSelectImpl();
         Map<String, Class> mapReturnValue = new HashMap();
 
-        Map<String, DetailMapObjDataConnector> listDetailObjectMap = (Map<String, DetailMapObjDataConnector>)DataConnectorFactoryImpl.getInitialContext().getMapObjectProccess().get(selectImpl.getClassToCreate().getName());
+        Map<String, DetailMapObjDataConnector> listDetailObjectMap = (Map<String, DetailMapObjDataConnector>)InitialContextDataconnectorImpl.mapObjectProccess.get(selectImpl.getClassToCreate().getName());
         for (Selection params : selectImpl.getListParametros()) {
             DetailMapObjDataConnector detailObjReturn = listDetailObjectMap.get(params.getAlias());
             mapReturnValue.put(params.getAlias(), detailObjReturn.getCampo().getType());

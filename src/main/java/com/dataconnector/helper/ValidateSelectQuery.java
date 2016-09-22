@@ -7,11 +7,12 @@ package com.dataconnector.helper;
 
 import com.dataconnector.annotation.DataConnectorAttributes;
 import com.dataconnector.commons.TupleSQL;
+import com.dataconnector.context.InitialContextDataconnectorImpl;
 import com.dataconnector.core.DataConnectorFactoryImpl;
 import com.dataconnector.exceptions.InitialCtxDataConnectorException;
 import com.dataconnector.obj.DetailMapObjDataConnector;
 import com.dataconnector.sql.SelectImpl;
-import com.dataconnector.sql.Selection;
+import com.dataconnectorcommons.sql.Selection;
 import com.dataconnector.utils.Constantes;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,12 +47,12 @@ public class ValidateSelectQuery {
 
     public void validateQuerySelect(SelectImpl select)  {
 
-        try {
+       
             //Obtiene el obj de retorno a mapear
             Class clase = select.getClassToCreate();
             //validar que no exista campos repetidos
             int countError = 0;
-            Map<String, DetailMapObjDataConnector> listDetailObjectMap = (Map<String, DetailMapObjDataConnector>) DataConnectorFactoryImpl.getInitialContext().getMapObjectProccess().get(clase.getName());
+            Map<String, DetailMapObjDataConnector> listDetailObjectMap = (Map<String, DetailMapObjDataConnector>) InitialContextDataconnectorImpl.mapObjectProccess.get(clase.getName());
             
             /*  for(DetailMapObjDataConnector detail:listDetailObjectMap){
             
@@ -79,10 +80,7 @@ public class ValidateSelectQuery {
             }
             //valida
             //  if 
-        } catch (InitialCtxDataConnectorException ex) {
-            Logger.getLogger(ValidateSelectQuery.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException("Problemas al obtener los metadatos del contexto",ex);
-        }
+         
 
     }
 }

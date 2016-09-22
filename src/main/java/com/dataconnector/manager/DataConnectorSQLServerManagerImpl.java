@@ -5,6 +5,7 @@
  */
 package com.dataconnector.manager;
 
+
 import com.dataconnector.query.SQLServerQuery;
 import com.dataconnector.query.Query;
 import com.dataconnector.builder.AbstractCriteriaBuilderImpl;
@@ -17,10 +18,11 @@ import com.dataconnector.criteria.update.CriteriaUpdateSQLServer;
 import com.dataconnector.criterial.generic.CriteriaQueryImpl;
 import com.dataconnector.excecution.SelectQueryImpl;
 import com.dataconnector.excecution.SelectSQLServerQueryImpl;
-import com.dataconnector.helper.DataConnectorConWrap;
 import com.dataconnector.helper.ValidateSelectQuery;
 import com.dataconnector.constans.ProvidersSupportEnum;
+import com.dataconnector.context.ContextDataConnectorImpl;
 import com.dataconnector.sql.CriteriaBuilder;
+import com.dataconnector.wrapper.DataConnectorConWrap;
 import java.sql.Connection;
 
 /**
@@ -33,12 +35,14 @@ import java.sql.Connection;
 public class DataConnectorSQLServerManagerImpl implements DataConnectorSQLServerManager {
 
     private final AbstractCriteriaBuilderImpl builder;
-    private final DataConnectorConWrap connector;
+    private  DataConnectorConWrap connector;
+     private final ContextDataConnectorImpl context;
 
-    public DataConnectorSQLServerManagerImpl(CriteriaBuilder builder, DataConnectorConWrap connector) {
+    public DataConnectorSQLServerManagerImpl(CriteriaBuilder builder, ContextDataConnectorImpl context) {
         this.builder = (AbstractCriteriaBuilderImpl) builder;
         this.builder.setDriver(ProvidersSupportEnum.SQLSERVER);
-        this.connector = connector;
+        this.context=context;
+      //  this.connector = context.getConnection();
 
     }
 
@@ -69,7 +73,7 @@ public class DataConnectorSQLServerManagerImpl implements DataConnectorSQLServer
 
     @Override
     public Connection getConnection() {
-        return connector.getConnection();
+        return context.getConnection().getConnection();
     }
 
     @Override
@@ -88,6 +92,18 @@ public class DataConnectorSQLServerManagerImpl implements DataConnectorSQLServer
         ValidateSelectQuery validate = ValidateSelectQuery.getInstance();
         validate.validateQuerySelect(implQ.getSelectImpl());
         return impl;
+    }
+
+   
+
+    @Override
+    public ProvidersSupportEnum getProvidersSupportEnum() {
+        return ProvidersSupportEnum.SQLSERVER;
+    }
+
+    @Override
+    public ContextDataConnectorImpl getContext() {
+       return context;
     }
 
 }

@@ -6,9 +6,10 @@
 package com.dataconnector.sql.join;
 
 import com.dataconnector.commons.ElementSQLEnum;
+import com.dataconnector.commons.metadata.MetadataFieldDataConnector;
 import com.dataconnector.object.JoinsTypeEnum;
 import com.dataconnector.object.ValueRoot;
-import com.dataconnector.sql.Expression;
+import com.dataconnectorcommons.sql.Expression;
 import com.dataconnector.sql.Join;
 import com.dataconnector.sql.JoinPredicate;
 import com.dataconnector.sql.Predicate;
@@ -91,7 +92,7 @@ public class JoinsImpl implements Join {
     }
 
     @Override
-    public ValueRoot get(String nombreParametro) {
+    public ValueRoot get(MetadataFieldDataConnector nombreParametro) {
         ValueRoot vr = new ValueRoot(alias, nombreParametro);
         return vr;
     }

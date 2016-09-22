@@ -6,6 +6,7 @@
 
 package com.dataconnector.builder;
 
+import com.dataconnector.context.ContextDataConnectorImpl;
 import com.dataconnector.criteria.AbstractQuery;
 import com.dataconnector.criteria.SubQuery;
 import com.dataconnector.criteria.delete.CommonAbstractDelete;
@@ -15,7 +16,7 @@ import com.dataconnector.function.sqlserver.RowNumberFuncImpl;
 import com.dataconnector.object.ValueExpression;
 import com.dataconnector.object.ValueRoot;
 import com.dataconnector.sql.CriteriaSQLServerBuilder;
-import com.dataconnector.sql.Expression;
+import com.dataconnectorcommons.sql.Expression;
 import com.dataconnector.sql.JoinPredicate;
 import com.dataconnector.sql.ParameterExpression;
 import com.dataconnector.sql.Predicate;
@@ -28,6 +29,14 @@ import com.dataconnector.sql.Predicate;
  */
 public class CriteriaSQLServerBuilderImpl extends AbstractCriteriaBuilderImpl implements CriteriaSQLServerBuilder{
 
+    
+     public CriteriaSQLServerBuilderImpl(ContextDataConnectorImpl context ){
+        super(context);
+    }
+     
+    public CriteriaSQLServerBuilderImpl(){
+    
+    } 
     @Override
     public Expression rowNumber(ValueRoot field,String alias) {
         RowNumberFuncImpl impl=new RowNumberFuncImpl(field, alias);

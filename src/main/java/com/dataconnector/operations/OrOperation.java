@@ -5,7 +5,7 @@
  */
 package com.dataconnector.operations;
 
-import com.dataconnector.sql.Expression;
+import com.dataconnectorcommons.sql.Expression;
 import com.dataconnector.sql.JoinPredicate;
 import com.dataconnector.sql.OperationEnum;
 import com.dataconnector.sql.Predicate;

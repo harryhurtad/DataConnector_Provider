@@ -5,13 +5,16 @@
  */
 package com.dataconnector.criterial.generic;
 
+import com.dataconnector.commons.metadata.MetdataTableDataConn;
+import com.dataconnector.context.ContextDataConnectorImpl;
 import com.dataconnector.criteria.CriteriaQuery;
+import com.dataconnector.exceptions.DataConnectorQueryException;
 import com.dataconnector.sql.FromImpl;
 import com.dataconnector.sql.Order;
 import com.dataconnector.sql.Predicate;
 import com.dataconnector.sql.Root;
 import com.dataconnector.sql.RootImpl;
-import com.dataconnector.sql.Selection;
+import com.dataconnectorcommons.sql.Selection;
 import com.dataconnector.sql.SelectImpl;
 import com.dataconnector.sql.WhereImpl;
 
@@ -29,13 +32,15 @@ public class CriteriaQueryImpl implements CriteriaQuery {
     private WhereImpl whereImpl;
     private int countAliasTable = 0;
     private final Class classToCreate;
+    private final ContextDataConnectorImpl context;
    // private Object param;
 
-    public CriteriaQueryImpl(Class param) {
+    public CriteriaQueryImpl(Class param,ContextDataConnectorImpl context) {
 
         fromImpl = new FromImpl();
         selectImpl = new SelectImpl(param);
         this.classToCreate=param;
+        this.context=context;
       
     }
 
@@ -57,9 +62,10 @@ public class CriteriaQueryImpl implements CriteriaQuery {
     }
 
     @Override
-    public Root from(String nombreTabla) {
+    public Root from(Class nombreTabla) throws DataConnectorQueryException{
+        
         countAliasTable++;
-        RootImpl impl = new RootImpl("t".concat("" + countAliasTable), nombreTabla);
+        RootImpl impl = new RootImpl("t".concat("" + countAliasTable), nombreTabla,context);
         fromImpl.proccess(impl);
         return impl;
     }

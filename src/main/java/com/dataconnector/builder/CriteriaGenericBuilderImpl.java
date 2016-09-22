@@ -6,6 +6,7 @@
 
 package com.dataconnector.builder;
 
+import com.dataconnector.context.ContextDataConnectorImpl;
 import com.dataconnector.criteria.delete.CommonAbstractDelete;
 import com.dataconnector.criteria.insert.CommonAbstractInsert;
 import com.dataconnector.criteria.update.CommonAbstractUpdate;
@@ -18,6 +19,11 @@ import com.dataconnector.criteria.update.CommonAbstractUpdate;
  */
 public class CriteriaGenericBuilderImpl extends AbstractCriteriaBuilderImpl {
 
+   
+    public CriteriaGenericBuilderImpl(ContextDataConnectorImpl context ){
+        super(context);
+    }
+    
     @Override
     public CommonAbstractInsert createInserQuery() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

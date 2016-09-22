@@ -15,8 +15,12 @@ import com.dataconnector.manager.DataConnectorFactory;
 import com.dataconnector.query.Query;
 import com.dataconnector.obj.TranslatePagination;
 import com.dataconnector.constans.ProvidersSupportEnum;
-import com.dataconnector.sql.Selection;
+import com.dataconnector.context.ContextDataConnectorImpl;
+import com.dataconnectorcommons.sql.Selection;
 import com.dataconnector.utils.Constantes;
+import com.dataconnector.manager.ContextDataConnector;
+import com.dataconnector.manager.DataConnectorConnection;
+import com.dataconnector.wrapper.DataConnectorConWrap;
 
 /**
  * {Insert class description here}
@@ -41,18 +45,20 @@ public class TranslatorHelper {
         return instance;
     }
 
-    public String translateStatementByDriver(AbstractQuery query, Query postQuery) throws InitialCtxDataConnectorException {
+    public String translateStatementByDriver(AbstractQuery query, Query postQuery,ContextDataConnector context) throws InitialCtxDataConnectorException {
         TranslateSelect translate = null;
-        String sql = null;
+        String sql = null;       
+        ProvidersSupportEnum supportEnum = context.getProvider();
         // if(element instanceof Equ)
-        MetaDataDataconnector metadata = DataConnectorFactoryImpl.getInitialContext().getDataDataconnector();
-        switch (metadata.getTypeDatabase()) {
+       // MetaDataDataconnector metadata = DataConnectorFactoryImpl.getInitialContext().getDataDataconnector();
+        switch (supportEnum) {
             case SQLSERVER:
                 translate = new TranslateSelectSqlServer();
                
             
-            case GENERIC:
-                if (metadata.getNameTypeDriver().equals(DataConnectorConstants.DRIVER_MYSQL)) {
+            case GENERIC:               
+               if(context.getConnection().getDriverName().equals(DataConnectorConstants.DRIVER_MYSQL)){
+                // if (metadata.getNameTypeDriver().equals(DataConnectorConstants.DRIVER_MYSQL)) {
                     translate = new TranslateSelectMySQL();
                 }
                
@@ -67,11 +73,13 @@ public class TranslatorHelper {
         return sql;
     }
 
-    public TranslatePagination translatePagValueByDriver(Integer posicionInicial, Integer posicionFinal) throws InitialCtxDataConnectorException {
+    public TranslatePagination translatePagValueByDriver(Integer posicionInicial, Integer posicionFinal,ContextDataConnector context) throws InitialCtxDataConnectorException {
         TranslateSelect translate = null;
         TranslatePagination pag = null;
-        MetaDataDataconnector metadata = DataConnectorFactoryImpl.getInitialContext().getDataDataconnector();
-        switch (metadata.getNameTypeDriver()) {
+       
+        DataConnectorConnection connection=context.getConnection();
+                
+        switch (connection.getDriverName()) {
             case DataConnectorConstants.DRIVER_MYSQL:
                 translate = new TranslateSelectMySQL();
                 break;

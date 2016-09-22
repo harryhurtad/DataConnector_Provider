@@ -5,15 +5,18 @@
  */
 package com.dataconnector.criterial.generic;
 
+import com.dataconnector.commons.metadata.MetdataTableDataConn;
+import com.dataconnector.context.ContextDataConnectorImpl;
 import com.dataconnector.criteria.AbstractQuery;
 import com.dataconnector.criteria.SubQuery;
+import com.dataconnector.exceptions.DataConnectorQueryException;
 import com.dataconnector.sql.FromImpl;
 import com.dataconnector.sql.Order;
 import com.dataconnector.sql.Predicate;
 import com.dataconnector.sql.Root;
 import com.dataconnector.sql.RootImpl;
 import com.dataconnector.sql.SelectImpl;
-import com.dataconnector.sql.Selection;
+import com.dataconnectorcommons.sql.Selection;
 import com.dataconnector.sql.WhereImpl;
 import com.dataconnector.utils.Constantes;
 
@@ -33,12 +36,14 @@ public class SubQueryImpl implements SubQuery {
     private Class typeReturn;
     private StringBuilder sql;
     private String alias = "";
+     private final ContextDataConnectorImpl context;
 
-    public SubQueryImpl(Class typeReturn) {
+    public SubQueryImpl(Class typeReturn,ContextDataConnectorImpl context) {
         this.typeReturn = typeReturn;
         selectImpl = new SelectImpl(typeReturn);
         fromImpl = new FromImpl();
         sql = new StringBuilder();
+        this.context=context;
 
     }
 
@@ -61,9 +66,9 @@ public class SubQueryImpl implements SubQuery {
     }
 
     @Override
-    public Root from(String nombreTabla) {
+    public Root from(Class nombreTabla) throws DataConnectorQueryException {
         countAliasTable++;
-        RootImpl impl = new RootImpl("sub".concat("" + countAliasTable), nombreTabla);
+        RootImpl impl = new RootImpl("sub".concat("" + countAliasTable), nombreTabla,context);
         fromImpl.proccess(impl);
         return impl;
     }

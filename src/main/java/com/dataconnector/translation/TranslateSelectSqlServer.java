@@ -15,9 +15,9 @@ import com.dataconnector.function.sqlserver.RowNumberFuncImpl;
 import com.dataconnector.query.Query;
 import com.dataconnector.query.SQLServerQuery;
 import com.dataconnector.obj.TranslatePagination;
-import com.dataconnector.sql.Expression;
+import com.dataconnectorcommons.sql.Expression;
 import com.dataconnector.sql.FromImpl;
-import com.dataconnector.sql.Selection;
+import com.dataconnectorcommons.sql.Selection;
 import com.dataconnector.utils.Constantes;
 
 /**

@@ -7,9 +7,9 @@ package com.dataconnector.function.sqlserver;
 
 import com.dataconnector.commons.ElementSQLEnum;
 import com.dataconnector.object.ValueRoot;
-import com.dataconnector.sql.AliasExpression;
-import com.dataconnector.sql.Expression;
-import com.dataconnector.sql.Selection;
+import com.dataconnectorcommons.sql.AliasExpression;
+import com.dataconnectorcommons.sql.Expression;
+import com.dataconnectorcommons.sql.Selection;
 import com.dataconnector.utils.Constantes;
 
 /**
