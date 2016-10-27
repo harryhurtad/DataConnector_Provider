@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
  */
 public class DetailMapObjDataConnector {
 
-   private Annotation anotacion; 
+   private final Annotation anotacion; 
    private Field campo;
    private Method metodo;
 

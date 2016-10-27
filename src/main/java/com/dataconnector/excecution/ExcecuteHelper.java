@@ -9,7 +9,7 @@ import com.dataconnector.core.DataConnectorFactoryImpl;
 import com.dataconnector.exceptions.InitialCtxDataConnectorException;
 import com.dataconnector.commons.helper.DataConnectorHelper;
 import com.dataconnector.context.InitialContextDataconnectorImpl;
-import com.dataconnector.manager.InitialContextDataConnector;
+import com.dataconnector.context.InitialContextDataConnector;
 import com.dataconnector.obj.DetailMapObjDataConnector;
 import com.dataconnector.obj.ParameterConstructClass;
 import com.dataconnector.obj.ParameterImpl;

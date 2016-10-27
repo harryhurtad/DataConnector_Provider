@@ -6,6 +6,7 @@
 package com.dataconnector.operations;
 
 import com.dataconnector.object.ValueExpression;
+import com.dataconnector.object.ValueRoot;
 import com.dataconnectorcommons.sql.Expression;
 import com.dataconnector.sql.OperationEnum;
 import com.dataconnector.sql.Predicate;
@@ -36,12 +37,17 @@ public class InOperation implements Predicate {
     /**
      * Retorna el procesamiento de la sentecia IN en obj Predicate
      *
+     * @param field
      * @param values
      * @return
      */
-    public Predicate proccessTranslate(String[] values) {
+    public Predicate proccessTranslate(ValueRoot field,String[] values) {
 
-        sql.append(Constantes.PARENTECIS_DERECHO);
+        sql.append(field.getSQLTransalte());
+        sql.append(Constantes.ESPACIO);
+        sql.append(getOperation().getSimboloOper());
+        sql.append(Constantes.ESPACIO);
+        sql.append(Constantes.PARENTECIS_IZQUIERDO);
         sql.append(Constantes.ESPACIO);
         for (int contador = 0; contador < values.length; contador++) {
             //Adicion los valores
@@ -53,7 +59,7 @@ public class InOperation implements Predicate {
             }
         }
         sql.append(Constantes.ESPACIO);
-        sql.append(Constantes.PARENTECIS_IZQUIERDO);
+        sql.append(Constantes.PARENTECIS_DERECHO);
 
         return this;
 

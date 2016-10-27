@@ -17,6 +17,7 @@ import com.dataconnector.obj.ParameterImpl;
 import com.dataconnector.constans.ProvidersSupportEnum;
 import com.dataconnector.context.ContextDataConnectorImpl;
 import com.dataconnector.object.ValueExpression;
+import com.dataconnector.object.ValueParam;
 import com.dataconnector.object.ValueRoot;
 import com.dataconnectorcommons.sql.Expression;
 import com.dataconnector.sql.Predicate;
@@ -126,10 +127,11 @@ public abstract class  AbstractCriteriaBuilderImpl implements CriteriaBuilder {
         return menorIgualQueOperation.translateOperation(param1, param2);
     }
 
+  
     @Override
-    public Predicate between(Expression param1, Expression param2) {
+    public Predicate between(ValueRoot field, ValueParam param1, ValueParam param2) {
         BetweenOperation betweenOperation = new BetweenOperation();
-        return betweenOperation.translateOperation(param1, param2);
+        return betweenOperation.translateOperation(field, param1, param2);
     }
 
     @Override
@@ -145,9 +147,9 @@ public abstract class  AbstractCriteriaBuilderImpl implements CriteriaBuilder {
     }
 
     @Override
-    public Predicate IN(String[] value) {
+    public Predicate  IN(ValueRoot field,String[] value){
         InOperation inOperation = new InOperation();
-        return inOperation.proccessTranslate(value);
+        return inOperation.proccessTranslate(field,value);
     }
 
     /**

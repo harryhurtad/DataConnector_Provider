@@ -50,10 +50,12 @@ public class ContextDataConnectorImpl  implements ContextDataConnector{
     private DataConnectorConWrap connection;
     private final ProvidersSupportEnum provider;
     private final Map<String, MetdataTableDataConn> mapTables;
+    private final ClassLoader classLoader;
 
-    public ContextDataConnectorImpl( ContextConf description) throws InitialCtxDataConnectorException {
+    public ContextDataConnectorImpl( ContextConf description,ClassLoader classLoader) throws InitialCtxDataConnectorException {
         this.nameConext = description.getContextName();
         this.description = description;
+        this.classLoader=classLoader;        
         mapTables=new HashMap<>();
         //
         proccesConnection(description.getConnection());
@@ -97,8 +99,8 @@ public class ContextDataConnectorImpl  implements ContextDataConnector{
             //   }
             for (String className : listClass) {
                 int i = className.indexOf(".class");
-                String nameClass = className.replace("/", ".").substring(0, i);
-                Class classWrapper = Class.forName(nameClass);
+                String nameClass = className.replace("/", ".").substring(0, i);                
+                Class classWrapper = Class.forName(nameClass,false, classLoader);
                  MetdataTableDataConn tableInst=(MetdataTableDataConn)classWrapper.newInstance();
                 //  Setea el la implementación de FielDataconnector en los fields que representa la tabla 
                 for (Field f : classWrapper.getFields()) {

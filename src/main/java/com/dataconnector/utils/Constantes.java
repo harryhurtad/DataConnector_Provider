@@ -41,6 +41,9 @@ public class Constantes {
     
     //Funciones
     public static final String ROWN_NUMBER_FUNCTION="ROW_NUMBER()";
+    public static final String OPTION_FUNCTION="OPTION"; 
+    public static final String MAXDOP_FUNCTION="MAXDOP";
+    public static final String WITHNOLOCK_FUNCTION="WITH (NOLOCK)";
     
     public static final String FILE_NAME_PROPERTIES_DATACONNECTOR="conf/dataconnector.properties";
     

@@ -121,6 +121,10 @@ public class SelectQueryImpl extends AbstractSelectQueryImpl {
         builder.append(ElementSQLEnum.ASTERISCO.getNameElement());
         builder.append(Constantes.PARENTECIS_DERECHO);
         builder.append(Constantes.ESPACIO);
+        builder.append(Constantes.ALIAS);
+        builder.append(Constantes.ESPACIO);
+        builder.append(Constantes.ALIAS_CANTIDAD);
+        builder.append(Constantes.ESPACIO);
         builder.append(impl.getFromImpl().getTranslation());
         if (impl.getWhereImpl() != null) {
             builder.append(Constantes.ESPACIO);

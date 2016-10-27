@@ -32,8 +32,8 @@ import com.dataconnector.sql.WhereImpl;
 import com.dataconnector.sql.join.JoinsImpl;
 import com.dataconnector.translation.TranslatorHelper;
 import com.dataconnector.utils.Constantes;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
+import com.google.unico.common.util.concurrent.ListeningExecutorService;
+import com.google.unico.common.util.concurrent.MoreExecutors;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -172,6 +172,7 @@ public abstract class AbstractSelectQueryImpl implements Query<Object> {
             Logger.getLogger(SelectQueryImpl.class.getName()).log(Level.SEVERE, null, ex);
                     throw new DataConnectorResultException("Upss!! Problemas al cargar la dotos del InitialContext" + ex);
         }
+        //<editor-fold defaultstate="collapsed" desc="Ejecucion Multi Thread">
         if (excecuteMulthiThread) {
             
             try {
@@ -282,23 +283,27 @@ public abstract class AbstractSelectQueryImpl implements Query<Object> {
             if (service != null) {
                 service.shutdown();
             }
+          //</editor-fold> 
+          //<editor-fold defaultstate="collapsed" desc="Ejecucion Single Thread">
+          
         } else {
-
+            
             System.out.println("*----------Inicio Ejecucion Simple DataConnector: " + format.format(new Date()) + "---------------*");
             sql = makeSQLStatementNotPagin();
-
+            
             //Ejecucion con un solo hislo
             excuteSingle = new ExcecuteSelectSingleStatementSQL(mapParameter, mapValueReturn, maxResult, manager);
-
+            
             try {
                 listaResultado = excuteSingle.excecuteSQLStatement(query.getClassToCreate(), sql);
-
+                
             } catch (InitialCtxDataConnectorException |NoSuchMethodException | IllegalArgumentException | InvocationTargetException | SQLException | InstantiationException | IllegalAccessException ex) {
                 Logger.getLogger(SelectQueryImpl.class.getName()).log(Level.SEVERE, null, ex);
                 throw new DataConnectorResultException("Upss!! Problemas al ejecutar la sentencia:" + ex);
             }
             System.out.println("*----------Fin Ejecucion Simple DataConnector:  " + format.format(new Date()) + "---------------*");
         }
+//</editor-fold>
         return listaResultado;
     }
 

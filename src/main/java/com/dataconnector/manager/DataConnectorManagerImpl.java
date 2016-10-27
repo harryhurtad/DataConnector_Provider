@@ -88,7 +88,7 @@ public class DataConnectorManagerImpl implements DataConnectorManager {
 
     @Override
     public Connection getConnection() {
-       return connector.getConnection();
+       return context.getConnection().getConnection();
     }
 
   

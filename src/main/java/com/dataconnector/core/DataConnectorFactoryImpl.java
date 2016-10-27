@@ -23,7 +23,7 @@ import com.dataconnector.context.ContextDataConnectorImpl;
 
 
 import com.dataconnector.manager.DataConnectorFactory;
-import com.dataconnector.manager.InitialContextDataConnector;
+import com.dataconnector.context.InitialContextDataConnector;
 
 /**
  * Factory que Realiza la creacion de las diferentes configuraciones soportadas

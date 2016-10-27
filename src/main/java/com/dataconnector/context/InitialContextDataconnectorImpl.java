@@ -7,49 +7,30 @@ package com.dataconnector.context;
 
 import com.dataconnector.annotation.DataConnectorAttributes;
 import com.dataconnector.annotation.DataConnectorPOJO;
-import com.dataconnector.commons.anotations.MetadataFielInfoDataConnector;
-import com.dataconnector.connection.MetaDataDataconnector;
 import com.dataconnector.core.DataConnectorFactoryImpl;
 import com.dataconnector.exceptions.InitialCtxDataConnectorException;
 import com.dataconnector.commons.helper.DataConnectorHelper;
-import com.dataconnector.commons.metadata.MetdataTableDataConn;
 import com.dataconnector.commons.xml.ProccessXMLDataConnector;
-import com.dataconnector.constans.ProvidersSupportEnum;
-import com.dataconnector.manager.InitialContextDataConnector;
+import com.dataconnector.manager.DataConnectorFactory;
 import com.dataconnector.obj.DetailMapObjDataConnector;
-import com.dataconnector.params.obj.ConnectionConf;
 import com.dataconnector.params.obj.ContextConf;
 import com.dataconnector.params.obj.DataConnectorConf;
 import com.dataconnector.utils.Constantes;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import org.apache.ignite.cache.query.annotations.QuerySqlField;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
-import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.util.StringUtils;
 
 /**
@@ -62,21 +43,24 @@ import org.springframework.util.StringUtils;
 public class InitialContextDataconnectorImpl implements InitialContextDataConnector {
 
     public static  Map<String, Map<String, DetailMapObjDataConnector>> mapObjectProccess;
-    private MetaDataDataconnector dataDataconnector;
+    
     public  static  Map<String, ContextDataConnectorImpl> mapContext;
 
     private final InputStream dataConnectorDesc;
+    
+    private final ClassLoader classLoader;
 
-    public InitialContextDataconnectorImpl(InputStream dataConnectorDesc) {
+    public InitialContextDataconnectorImpl(InputStream dataConnectorDesc,ClassLoader classLoader) {
         this.dataConnectorDesc = dataConnectorDesc;
         mapObjectProccess = new HashMap<>();
         mapContext = new HashMap<>();
+        this.classLoader=classLoader;
 
     }
 
-   
+    
 
-    @Override
+    @Override    
     public void initialContext() throws InitialCtxDataConnectorException {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         DataConnectorHelper.getInstance().printInitDataConnector();
@@ -94,7 +78,7 @@ public class InitialContextDataconnectorImpl implements InitialContextDataConnec
             basePackage = conf.getPackage_base();
             for (ContextConf context : conf.getContext()) {
 
-                ContextDataConnectorImpl contextTmp = new ContextDataConnectorImpl(context);
+                ContextDataConnectorImpl contextTmp = new ContextDataConnectorImpl(context,classLoader);
                 mapContext.put(context.getContextName(), contextTmp);
 
             }
@@ -131,14 +115,14 @@ public class InitialContextDataconnectorImpl implements InitialContextDataConnec
      */
     private void extractFieldFromClass(String nameClass) throws ClassNotFoundException, InitialCtxDataConnectorException {
         boolean methodSetFind;
-        Class className = Class.forName(nameClass);
+        Class className = Class.forName(nameClass,false,classLoader);
         Field[] fields = className.getDeclaredFields();
         Map<String, DetailMapObjDataConnector> listaDetail = new HashMap<>();
         for (Field campo : fields) {
             Annotation[] annotatios = campo.getAnnotations();
 
             for (Annotation anotacion : annotatios) {
-                if (anotacion instanceof DataConnectorAttributes) {
+                if (anotacion instanceof QuerySqlField) {
                     // Busca el método set correspondiente al campo
 
                     String setterName = "set" + StringUtils.capitalize(campo.getName());
@@ -152,10 +136,10 @@ public class InitialContextDataconnectorImpl implements InitialContextDataConnec
                             break;
                         }
                     }
-                    //Si encuentra el campo correspondiente a us accessor lo inserta
+                    //Si encuentra el campo correspondiente a su accessor lo inserta
                     if (methodSetFind) {
                         detail = new DetailMapObjDataConnector(campo, metodo, anotacion);
-                        listaDetail.put(campo.getName(), detail);
+                        listaDetail.put(((QuerySqlField) anotacion).name(), detail);
                     } else {
                         InitialCtxDataConnectorException ex = new InitialCtxDataConnectorException(Constantes.MSN_EXCEPTION_INITIAL_CONTEXT_MAPEO);
                         throw ex;
@@ -173,6 +157,11 @@ public class InitialContextDataconnectorImpl implements InitialContextDataConnec
             scannedComponents.add(beanDefinition.getBeanClassName());
         }
 
+    }
+
+    @Override
+    public DataConnectorFactory createDataConnectorFactory(String dataConnectorUnitName) throws InitialCtxDataConnectorException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
    

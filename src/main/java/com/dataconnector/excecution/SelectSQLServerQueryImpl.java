@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.dataconnector.excecution;
 
 import com.dataconnector.builder.CriteriaSQLServerBuilderImpl;
@@ -13,6 +12,7 @@ import com.dataconnector.criteria.CriteriaQuery;
 import com.dataconnector.criterial.generic.CriteriaQueryImpl;
 
 import com.dataconnector.exceptions.DataConnectorResultException;
+import com.dataconnector.function.sqlserver.RowNumberFuncImpl;
 import com.dataconnector.manager.DataConnectorManager;
 import com.dataconnector.manager.DataConnectorSQLServerManager;
 import com.dataconnector.query.Query;
@@ -27,46 +27,77 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *{Insert class description here}
- * @version $Revision: 1.1.1  (UTF-8)
- * @since build 22/03/2016  
- * @author proveedor_hhurtado  email: proveedor_hhurtad@ath.com.co
+ * {Insert class description here}
+ *
+ * @version $Revision: 1.1.1 (UTF-8)
+ * @since build 22/03/2016
+ * @author proveedor_hhurtado email: proveedor_hhurtad@ath.com.co
  */
 public class SelectSQLServerQueryImpl extends AbstractSelectQueryImpl implements SQLServerQuery<Object> {
 
-    private ValueRoot fieldRow;
+    private boolean  isSelectForRowNumber;
+    private Integer maxDop;
+    private boolean nolock = false;
+    private ValueRoot fieldRowIndex;
     
     public SelectSQLServerQueryImpl(AbstractQuery q, DataConnectorSQLServerManager manager) {
         super(q, manager);
     }
- 
-     
 
-    
-    @Override
-    public void setFieldRowNumber(ValueRoot field) {
-        fieldRow=field;
+   
+
+    public void setIsSelectForRowNumber(boolean isSelectForRowNumber) {
+        this.isSelectForRowNumber = isSelectForRowNumber;
+    }
+
+  
+
+    public boolean isNolock() {
+        return nolock;
     }
 
     @Override
     public void setWithNotLock(boolean root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.nolock = root;
     }
 
-   /**
-    * Realiza la creacion de la sentencia sql sin paginacion
-    * @return 
-    */
+    public String makeSQLStatementWithNotLock() {
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(Constantes.ESPACIO);
+        builder.append(Constantes.WITHNOLOCK_FUNCTION);
+        builder.append(Constantes.ESPACIO);
+
+        return builder.toString();
+
+    }
+
+    /**
+     * Realiza la creacion de la sentencia sql sin paginacion
+     *
+     * @return
+     */
     @Override
     public String makeSQLStatementNotPagin() {
-       StringBuilder sql = new StringBuilder();
+        StringBuilder sql = new StringBuilder();
         CriteriaQueryImpl impl = (CriteriaQueryImpl) query;
+        CriteriaSQLServerBuilderImpl csqlsbi = new CriteriaSQLServerBuilderImpl();
         FromImpl from = impl.getFromImpl();
         from.proccessJoins();
         WhereImpl where = impl.getWhereImpl();
 
-              
-        sql.append(impl.getSelectImpl().getTranslation());
+       
+        //Si tiene habilida la opcion RowNumber
+        if (this.isIsSelectForRowNumber()) {
+            SelectSQLServerQueryImpl qSelect = ((SelectSQLServerQueryImpl) this);
+            RowNumberFuncImpl exp = (RowNumberFuncImpl) csqlsbi.rowNumber(qSelect.getFieldRowIndex(), Constantes.ALIAS_PAGINATION_SQL_SERVER);
+            exp.process();
+            impl.getSelectImpl().getListParametros().add(exp);
+            impl.getSelectImpl().proccess();
+            sql.append(impl.getSelectImpl().getTranslation());
+        }else{
+             sql.append(impl.getSelectImpl().getTranslation());
+        }
         sql.append(Constantes.ESPACIO);
         sql.append(from.getTranslation());
         sql.append(Constantes.ESPACIO);
@@ -95,7 +126,7 @@ public class SelectSQLServerQueryImpl extends AbstractSelectQueryImpl implements
         builder.append(Constantes.ESPACIO);
         builder.append(Constantes.ALIAS_CANTIDAD);
         builder.append(Constantes.ESPACIO);
-        
+
         builder.append(impl.getFromImpl().getTranslation());
         if (impl.getWhereImpl() != null) {
             builder.append(Constantes.ESPACIO);
@@ -104,13 +135,53 @@ public class SelectSQLServerQueryImpl extends AbstractSelectQueryImpl implements
         return builder.toString();
     }
 
-    public void setFieldRow(ValueRoot fieldRow) {
-        this.fieldRow = fieldRow;
+    public String makeSQLStatementMaxDop() {
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(Constantes.ESPACIO);
+        builder.append(Constantes.OPTION_FUNCTION);
+        builder.append(Constantes.PARENTECIS_IZQUIERDO);
+        builder.append(Constantes.MAXDOP_FUNCTION);
+        builder.append(Constantes.ESPACIO);
+        builder.append(getMaxDop());
+        builder.append(Constantes.ESPACIO);
+        builder.append(Constantes.PARENTECIS_DERECHO);
+        builder.append(Constantes.ESPACIO);
+
+        return builder.toString();
     }
 
-    public ValueRoot getFieldRow() {
-        return fieldRow;
-    }
 
     
+
+    @Override
+    public void setMaxDop(Integer noProcesor) {
+        this.maxDop = noProcesor;
+    }
+
+    public Integer getMaxDop() {
+
+        return maxDop;
+    }
+
+    @Override
+    public void setFieldRowIndex(ValueRoot field) {
+        fieldRowIndex=field;
+    }
+
+    public ValueRoot getFieldRowIndex() {
+        return fieldRowIndex;
+    }
+
+    public boolean isIsSelectForRowNumber() {
+        return isSelectForRowNumber;
+    }
+
+    @Override
+    public void isSelectForRowNumber(boolean responce) {
+        this.isSelectForRowNumber=responce;
+    }
+    
+    
+
 }

@@ -62,7 +62,7 @@ public class DataConnectorConWrap implements DataConnectorConnection {
         Connection con = null;
 
         try {
-            Properties prop = DataConnectorHelper.getInstance().readPropertiesDataConnector(FILE_NAME_PROPERTIES_DATACONNECTOR);
+        
             if (driverConf != null) {
               //  String url = prop.getProperty("url");
                 //   String dbUser = prop.getProperty("dbUser");;
@@ -81,7 +81,7 @@ public class DataConnectorConWrap implements DataConnectorConnection {
                 //  driverName=provider.toString();
             }
 
-        } catch (ClassNotFoundException | SQLException | IOException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DataConnectorConWrap.class.getName()).log(Level.SEVERE, null, ex);
         }
 

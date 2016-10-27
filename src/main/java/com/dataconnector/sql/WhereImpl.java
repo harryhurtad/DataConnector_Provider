@@ -39,6 +39,17 @@ public class WhereImpl implements TupleSQL {
         this.parametros = parametros;
     }
 
+    
+     public void proccess(Predicate[] parametros) {
+
+        sql.append(getTypeElementSQL().getNameElement());        
+        for(Predicate predicate:parametros){
+          sql.append(Constantes.ESPACIO);
+         sql.append(predicate.getSQLTransalte());
+        }
+      //  this.parametros = parametros;
+    }
+    
    
 
     @Override
